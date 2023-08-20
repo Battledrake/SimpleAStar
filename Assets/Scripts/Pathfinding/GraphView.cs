@@ -5,9 +5,18 @@ using UnityEngine;
 [RequireComponent(typeof(Graph))]
 public class GraphView : MonoBehaviour
 {
-    public NodeView _nodeViewPrefab;
+    [SerializeField] private NodeView _nodeViewPrefab;
+    [SerializeField] private GameObject _worldGrid;
 
+    [SerializeField] private Color _openColor;
+    [SerializeField] private Color _blockedColor;
+    [SerializeField] private Color _baseColor;
+    [SerializeField] private Color _selectedColor;
+    [SerializeField] private Color _inRangePathColor;
+    [SerializeField] private Color _outRangePathColor;
     public NodeView[,] _nodeViews;
+
+    private Graph _graph;
 
     public void Init(Graph graph)
     {
@@ -16,29 +25,41 @@ public class GraphView : MonoBehaviour
             Debug.LogError("GRAPHVIEW No graph to Initialize");
         }
 
-        _nodeViews = new NodeView[graph.Width, graph.Height];
+        _graph = graph;
 
-        GameObject nodeViewParent = new GameObject("[NodeViews]");
+        //_nodeViews = new NodeView[graph.Width, graph.Height];
 
-        foreach (Node node in graph.Nodes)
-        {
-            NodeView nodeView = Instantiate<NodeView>(_nodeViewPrefab, nodeViewParent.transform);
+        //GameObject nodeViewParent = new GameObject("[NodeViews]");
 
-            if (nodeView != null)
-            {
-                nodeView.Init(node);
-                _nodeViews[node._graphPosition.x, node._graphPosition.z] = nodeView;
-                if (node._isBlocked)
-                {
-                    nodeView.ColorNode(Color.black);
-                }
-                else
-                {
-                    Color originalColor = MapData.GetColorFromTerrainCost(node._terrainCost);
-                    nodeView.ColorNode(originalColor);
-                }
-            }
-        }
+        //foreach (Node node in graph.Nodes)
+        //{
+        //    NodeView nodeView = Instantiate<NodeView>(_nodeViewPrefab, nodeViewParent.transform);
+
+        //    if (nodeView != null)
+        //    {
+        //        nodeView.Init(node);
+        //        _nodeViews[node._graphPosition.x, node._graphPosition.z] = nodeView;
+        //        if (node._isBlocked)
+        //        {
+        //            nodeView.ColorNode(Color.black);
+        //        }
+        //        else
+        //        {
+        //            Color originalColor = MapData.GetColorFromTerrainCost(node._terrainCost);
+        //            nodeView.ColorNode(originalColor);
+        //        }
+        //    }
+        //}
+    }
+
+    public void SetInRangePathNode(Node pathNode)
+    {
+        if (_worldGrid == null) return;
+
+        Renderer gridRenderer = _worldGrid.GetComponent<Renderer>();
+        gridRenderer.material.SetInt("_SelectedCellX", pathNode._graphPosition.x);
+        gridRenderer.material.SetInt("_SelectedCellY", pathNode._graphPosition.z);
+        gridRenderer.material.SetInt("_SelectedCell", 1);
     }
 
     public void ResetColors()
@@ -52,7 +73,7 @@ public class GraphView : MonoBehaviour
     public void ColorNode(Node node, Color color)
     {
         NodeView nodeView = _nodeViews[node._graphPosition.x, node._graphPosition.z];
-        if(nodeView != null)
+        if (nodeView != null)
         {
             nodeView.ColorNode(color);
         }

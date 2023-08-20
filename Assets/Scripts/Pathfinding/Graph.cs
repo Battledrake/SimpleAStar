@@ -19,8 +19,9 @@ public class Graph : MonoBehaviour
 
     private Node[,] _nodes;
     private int[,] _mapData;
-    private int _width;
-    private int _height;
+    [SerializeField] private int _width;
+    [SerializeField] private int _height;
+    [SerializeField] private int _cellSize;
 
 
     public static readonly Vector2Int[] CardinalDirections =
@@ -43,6 +44,31 @@ public class Graph : MonoBehaviour
         new Vector2Int(-1, 1)
     };
 
+    public void Init()
+    {
+        _nodes = new Node[_width, _height];
+        for (int z = 0; z < _height; z++)
+        {
+            for (int x = 0; x < _width; x++)
+            {
+                GraphPosition graphPosition = new GraphPosition(x, z);
+                Node newNode = new Node(graphPosition, 0, false);
+                _nodes[x, z] = newNode;
+
+                newNode._position = new Vector3(x * _cellSize + _cellSize / 2, 0, z * _cellSize + _cellSize / 2);
+            }
+        }
+
+        for (int z = 0; z < _height; z++)
+        {
+            for (int x = 0; x < _width; x++)
+            {
+                if (!_nodes[x, z]._isBlocked)
+                    _nodes[x, z]._neighbors = GetNeighbors(new GraphPosition(x, z));
+            }
+        }
+    }
+
     public void Init(int[,] mapData)
     {
         _mapData = mapData;
@@ -59,7 +85,7 @@ public class Graph : MonoBehaviour
                 Node newNode = new Node(graphPosition, terrainCost, isBlocked);
                 _nodes[x, z] = newNode;
 
-                newNode._position = new Vector3(x, 0, z);
+                newNode._position = new Vector3(x * _cellSize, 0, z * _cellSize);
             }
         }
 
@@ -96,6 +122,13 @@ public class Graph : MonoBehaviour
             return !_nodes[graphPosition.x, graphPosition.z]._isBlocked;
         }
         return false;
+    }
+
+    public GraphPosition GetGraphPositionFromWorld(Vector3 WorldPosition)
+    {
+        return new GraphPosition(
+            Mathf.FloorToInt(WorldPosition.x / _cellSize),
+            Mathf.FloorToInt(WorldPosition.z / _cellSize));
     }
 
     public List<Node> GetNeighbors(GraphPosition graphPosition)
