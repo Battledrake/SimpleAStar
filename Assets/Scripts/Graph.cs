@@ -7,8 +7,7 @@ public class Graph : MonoBehaviour
     public enum DirectionType
     {
         Cardinal,
-        Hex,
-        All
+        Eight
     }
 
     [SerializeField] private DirectionType _directionType;
@@ -32,17 +31,7 @@ public class Graph : MonoBehaviour
         new Vector2Int(-1, 0)
     };
 
-    public static readonly Vector2Int[] HexDirections =
-    {
-        new Vector2Int(0, 1),
-        new Vector2Int(1, 1),
-        new Vector2Int(1, -1),
-        new Vector2Int(0, -1),
-        new Vector2Int(-1, -1),
-        new Vector2Int(-1, 1)
-    };
-
-    public static readonly Vector2Int[] AllDirections =
+    public static readonly Vector2Int[] EightDirections =
     {
         new Vector2Int(0, 1),
         new Vector2Int(1, 1),
@@ -116,8 +105,6 @@ public class Graph : MonoBehaviour
 
         foreach (Vector2Int dir in directions)
         {
-            //int newX = x + dir.x;
-            //int newY = y + dir.y;
             int newX = graphPosition.x + dir.x;
             int newZ = graphPosition.z + dir.y;
 
@@ -137,10 +124,8 @@ public class Graph : MonoBehaviour
         {
             case DirectionType.Cardinal:
                 return CardinalDirections;
-            case DirectionType.Hex:
-                return HexDirections;
-            case DirectionType.All:
-                return AllDirections;
+            case DirectionType.Eight:
+                return EightDirections;
             default:
                 return new Vector2Int[0];
         }
