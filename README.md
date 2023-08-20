@@ -22,6 +22,6 @@ My algorithm shares a lot of similarities to the one used by Unreal Engine, as i
 
 Optimizations in my algorithm include bool checks for isOpen and isClosed instead of closed list creation and open/closed list checks. PriorityQueue for open list. Neighborlist creation during Graph build with blocked node exclusion to reduce node checks. Replacement of List.Insert with Reverse() for improved log. DiagonalShortcut choice for sqrt calculation avoidance if desired. 
 
-Current features include map creation via text or texture image, reading in values to set blocked nodes and even terrain. Left-lick and path. Right-click and waypoint path.
+Current features include map creation via text or texture image, reading in values to set blocked nodes and even terrain. Left-click and path. Right-click and waypoint path.
 
-Future implementations will be a basic unit with selection. Grid creation outside of textures/text files. Better graph and nodeview implementations while keeping with MVC pattern. Possible splitting of the Node class to have pathfinding nodes and nodes used for game unit information. Top down camera and movement.
+Future implementations will be a basic unit with selection and pathing. Grid creation outside of textures/text files. Better graph and nodeview implementations while keeping with MVC pattern. Possible splitting of the Node class to have pathfinding nodes and nodes used for game unit information. Top down camera and movement. Hex grid creations. 3D grid-based pathfinding.
