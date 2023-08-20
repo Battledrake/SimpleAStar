@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class Graph : MonoBehaviour
 {
-    public enum DirectionType
+    public enum GraphConnections
     {
         Cardinal,
         Eight
     }
 
-    [SerializeField] private DirectionType _directionType;
+    [SerializeField] private GraphConnections _connections;
 
 
     public Node[,] Nodes => _nodes;
@@ -100,15 +100,15 @@ public class Graph : MonoBehaviour
 
     public List<Node> GetNeighbors(GraphPosition graphPosition)
     {
-        Vector2Int[] directions = GetDirectionsByType(_directionType);
+        Vector2Int[] directions = GetDirectionsByType(_connections);
         List<Node> neighborNodes = new List<Node>();
 
-        foreach (Vector2Int dir in directions)
+        foreach (Vector2Int direction in directions)
         {
-            int newX = graphPosition.x + dir.x;
-            int newZ = graphPosition.z + dir.y;
+            int newX = graphPosition.x + direction.x;
+            int newZ = graphPosition.z + direction.y;
 
-            if (IsWithinBounds(graphPosition + dir)
+            if (IsWithinBounds(graphPosition + direction)
                 && (!_nodes[newX, newZ]._isBlocked))
             {
                 neighborNodes.Add(_nodes[newX, newZ]);
@@ -118,13 +118,13 @@ public class Graph : MonoBehaviour
         return neighborNodes;
     }
 
-    public Vector2Int[] GetDirectionsByType(DirectionType neighborType)
+    public Vector2Int[] GetDirectionsByType(GraphConnections neighborType)
     {
         switch (neighborType)
         {
-            case DirectionType.Cardinal:
+            case GraphConnections.Cardinal:
                 return CardinalDirections;
-            case DirectionType.Eight:
+            case GraphConnections.Eight:
                 return EightDirections;
             default:
                 return new Vector2Int[0];
