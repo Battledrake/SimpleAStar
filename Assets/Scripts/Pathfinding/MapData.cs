@@ -19,25 +19,25 @@ public class MapData : MonoBehaviour
         TextureMap
     }
 
-    [SerializeField, HideInInspector] private MapCreationType _mapCreationType;
+    [SerializeField, HideInInspector, RuntimeReadOnly] private MapCreationType _mapCreationType;
 
-    [SerializeField, HideInInspector] private int _mapWidth = 10;
-    [SerializeField, HideInInspector] private int _mapHeight = 10;
-    [SerializeField, HideInInspector] private TextAsset _textMap;
-    [SerializeField, HideInInspector] private Texture2D _textureMap;
+    [SerializeField, HideInInspector, RuntimeReadOnly] private int _mapWidth = 10;
+    [SerializeField, HideInInspector, RuntimeReadOnly] private int _mapHeight = 10;
+    [SerializeField, HideInInspector, RuntimeReadOnly] private TextAsset _textMap;
+    [SerializeField, HideInInspector, RuntimeReadOnly] private Texture2D _textureMap;
 
-    [SerializeField, HideInInspector] private Color32 _lightTerrainColor = new Color32(124, 194, 78, 255);
-    [SerializeField, HideInInspector] private Color32 _mediumTerrainColor = new Color32(252, 255, 52, 255);
-    [SerializeField, HideInInspector] private Color32 _heavyTerrainColor = new Color32(255, 129, 12, 255);
+    [SerializeField, HideInInspector, RuntimeReadOnly] private Color32 _lightTerrainColor = new Color32(124, 194, 78, 255);
+    [SerializeField, HideInInspector, RuntimeReadOnly] private Color32 _mediumTerrainColor = new Color32(252, 255, 52, 255);
+    [SerializeField, HideInInspector, RuntimeReadOnly] private Color32 _heavyTerrainColor = new Color32(255, 129, 12, 255);
 
-    [SerializeField] private int _cellSize = 1;
+    [SerializeField, RuntimeReadOnly] private int _cellSize = 1;
 
-    [SerializeField] private Color32 _openColor = Color.grey;
-    [SerializeField] private Color32 _blockedColor = Color.black;
+    [SerializeField, RuntimeReadOnly] private Color32 _openColor = Color.grey;
+    [SerializeField, RuntimeReadOnly] private Color32 _blockedColor = Color.black;
 
-    [SerializeField] private GraphConnections _connections;
-    [SerializeField] private GraphView _graphView;
-    [SerializeField] private bool _hideGraphViewOnPlay;
+    [SerializeField, RuntimeReadOnly] private GraphConnections _connections;
+    [SerializeField, RuntimeReadOnly] private GraphView _graphView;
+    [SerializeField, RuntimeReadOnly] private bool _hideGraphViewOnPlay;
 
     public Graph GetGraph() => _graph;
 
