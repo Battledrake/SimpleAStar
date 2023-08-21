@@ -1,9 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using System;
-using UnityEngine.SceneManagement;
 
 public enum GraphConnections
 {
@@ -13,46 +10,43 @@ public enum GraphConnections
 
 public class MapData : MonoBehaviour
 {
-    [SerializeField] private int _mapWidth = 10;
-    [SerializeField] private int _mapHeight = 10;
+    private enum MapCreationType
+    {
+        InspectorValues,
+        TextAsset,
+        TextureMap
+    }
+
+    [SerializeField, HideInInspector] private MapCreationType _mapCreationType;
+
+    [SerializeField, HideInInspector] private int _mapWidth = 10;
+    [SerializeField, HideInInspector] private int _mapHeight = 10;
+    [SerializeField, HideInInspector] private TextAsset _textMap;
+    [SerializeField, HideInInspector] private Texture2D _textureMap;
+
+    [SerializeField, HideInInspector] private Color32 _blockedColor = Color.black;
+    [SerializeField, HideInInspector] private Color32 _openColor = Color.white;
+    [SerializeField, HideInInspector] private Color32 _lightTerrainColor = new Color32(124, 194, 78, 255);
+    [SerializeField, HideInInspector] private Color32 _mediumTerrainColor = new Color32(252, 255, 52, 255);
+    [SerializeField, HideInInspector] private Color32 _heavyTerrainColor = new Color32(255, 129, 12, 255);
+
     [SerializeField] private int _cellSize = 1;
     [SerializeField] private GraphConnections _connections;
     [SerializeField] private GraphView _graphView;
-
-    [SerializeField] private TextAsset _textMap;
-    [SerializeField] private Texture2D _textureMap;
-    [Tooltip("Path to auto load data if not inserted")]
-    [SerializeField] private string _resourcePath = "MapData";
-
-    [SerializeField] private Color32 _blockedColor = Color.black;
-    [SerializeField] private Color32 _openTerrainColor = Color.white;
-    [SerializeField] private Color32 _lightTerrainColor = new Color32(124, 194, 78, 255);
-    [SerializeField] private Color32 _mediumTerrainColor = new Color32(252, 255, 52, 255);
-    [SerializeField] private Color32 _heavyTerrainColor = new Color32(255, 129, 12, 255);
 
     public Graph GetGraph() => _graph;
 
     private static Dictionary<Color32, int> _terrainLookupTable = new Dictionary<Color32, int>();
 
+    private int _graphWidth;
+    private int _graphHeight;
     private Graph _graph;
 
     private void Awake()
     {
         SetupLookupTable();
 
-        _graph = new Graph(_connections, _mapWidth, _mapHeight, _cellSize);
-        _graphView.Init(_graph);
-
-        //string levelName = SceneManager.GetActiveScene().name;
-        //if (_textureMap == null && _textMap == null)
-        //{
-        //    _textureMap = Resources.Load<Texture2D>(_resourcePath + "/" + levelName);
-        //}
-
-        //if(_textMap == null)
-        //{
-        //    _textMap = Resources.Load<TextAsset>(_resourcePath + "/" + levelName);
-        //}
+        CreateGraph();
     }
 
     public PathResult FindPath(GraphPosition startPosition, GraphPosition endPosition, out List<GraphPosition> pathPositions)
@@ -77,7 +71,7 @@ public class MapData : MonoBehaviour
     public List<Vector3> GetWorldPositionsFromGraphPositions(List<GraphPosition> graphPositions)
     {
         List<Vector3> vectorList = new List<Vector3>();
-        foreach(GraphPosition position in graphPositions)
+        foreach (GraphPosition position in graphPositions)
         {
             vectorList.Add(new Vector3(position.x * _cellSize, 0f, position.z * _cellSize));
         }
@@ -104,7 +98,7 @@ public class MapData : MonoBehaviour
 
     private void SetupLookupTable()
     {
-        _terrainLookupTable.Add(_openTerrainColor, 0);
+        _terrainLookupTable.Add(_openColor, 0);
         _terrainLookupTable.Add(_lightTerrainColor, 1);
         _terrainLookupTable.Add(_mediumTerrainColor, 2);
         _terrainLookupTable.Add(_heavyTerrainColor, 3);
@@ -171,42 +165,49 @@ public class MapData : MonoBehaviour
 
     public void SetDimensions(List<string> textLines)
     {
-        _mapHeight = textLines.Count;
+        _graphHeight = textLines.Count;
         foreach (string line in textLines)
         {
             if (line.Length > _mapWidth)
             {
-                _mapWidth = line.Length;
+                _graphWidth = line.Length;
             }
         }
     }
 
-    public int[,] MakeMap()
+    public void CreateGraph()
     {
         List<string> lines = new List<string>();
 
-        if (_textureMap != null)
+        switch (_mapCreationType)
         {
-            lines = GetMapFromTexture(_textureMap);
+            case MapCreationType.InspectorValues:
+                _graphWidth = _mapWidth;
+                _graphHeight = _mapHeight;
+                break;
+            case MapCreationType.TextAsset:
+                lines = GetMapFromTextFile(_textMap);
+                break;
+            case MapCreationType.TextureMap:
+                lines = GetMapFromTexture(_textureMap);
+                break;
         }
-        else
-        {
-            lines = GetMapFromTextFile(_textMap);
-        }
+        if (lines.Count > 0)
+            SetDimensions(lines);
 
-        SetDimensions(lines);
+        //FIX: Realize that can't change connections at runtime, might want to change that.
+        //Also create graph with blocked nodes needs to be re-implemented.
+        _graph = new Graph(_connections, _graphWidth, _graphHeight, _cellSize);
+        _graphView.Init(_graph);
 
-        int[,] map = new int[_mapWidth, _mapHeight];
-        for (int y = 0; y < _mapHeight; y++)
+        for (int z = 0; z < _graphHeight; z++)
         {
-            for (int x = 0; x < _mapWidth; x++)
+            for (int x = 0; x < _graphWidth; x++)
             {
-                if (lines[y].Length > x)
-                {
-                    map[x, y] = (int)Char.GetNumericValue(lines[y][x]);
-                }
+                //TODO: Set Nodes to blocked
+                _graph.SetNodeIsBlocked(new GraphPosition(x, z), true);
+                _graphView.SetViewColorFromIsBlocked(new GraphPosition(x, z), true);
             }
         }
-        return map;
     }
 }

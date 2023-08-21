@@ -152,8 +152,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3820e2afd8794c244b33ca7db6498d05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveSpeed: 4
+  _moveSpeed: 10
   _rotateSpeed: 10
+  _stoppingDistance: 0.1
   _drawDebugPath: 1
   _moveAllowance: 6
 --- !u!4 &20410555
@@ -202,14 +203,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd214b899ee110245abcc186d330f323, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mapWidth: 100
-  _mapHeight: 100
+  _mapCreationType: 1
+  _mapWidth: 10
+  _mapHeight: 10
+  _textMap: {fileID: 4900000, guid: d4110db368b865e40bfdece93bb91bde, type: 3}
+  _textureMap: {fileID: 2800000, guid: 06c8075393f3af8488e9fc898fc5b885, type: 3}
   _cellSize: 1
   _connections: 1
   _graphView: {fileID: 335146464}
-  _textMap: {fileID: 0}
-  _textureMap: {fileID: 0}
-  _resourcePath: 
   _blockedColor:
     serializedVersion: 2
     rgba: 4278190080
