@@ -8,7 +8,6 @@ public class Node : IComparable<Node>
     public GraphPosition _graphPosition;
 
     public int _terrainCost;
-    public Vector3 _position;
 
     public List<Node> _neighbors = new List<Node>();
 

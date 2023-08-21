@@ -56,8 +56,6 @@ public class Graph
                 GraphPosition graphPosition = new GraphPosition(x, z);
                 Node newNode = new Node(graphPosition, 0, false);
                 _nodes[x, z] = newNode;
-
-                newNode._position = new Vector3(x * _cellSize + _cellSize / 2, 0, z * _cellSize + _cellSize / 2);
             }
         }
 
