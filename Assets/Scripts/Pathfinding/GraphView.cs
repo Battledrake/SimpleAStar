@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GraphView : MonoBehaviour
@@ -9,7 +7,7 @@ public class GraphView : MonoBehaviour
     private NodeView[,] _nodeViews;
     private Graph _graph;
 
-    public void Init(Graph graph)
+    public void Init(Graph graph, int cellSize)
     {
         if (graph == null)
         {
@@ -26,7 +24,7 @@ public class GraphView : MonoBehaviour
         {
             NodeView nodeView = Instantiate<NodeView>(_nodeViewPrefab, nodeViewParent.transform);
 
-            nodeView.Init(node._graphPosition, _graph.CellSize);
+            nodeView.Init(node._graphPosition, cellSize);
             _nodeViews[node._graphPosition.x, node._graphPosition.z] = nodeView;
             nodeView.SetViewColorFromIsBlocked(false);
         }

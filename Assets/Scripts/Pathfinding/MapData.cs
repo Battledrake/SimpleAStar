@@ -191,7 +191,7 @@ public class MapData : MonoBehaviour
         //FIX: Realize that can't change connections at runtime, might want to change that.
         //Also create graph with blocked nodes needs to be re-implemented.
         _graph = new Graph(_connections, _graphWidth, _graphHeight, _cellSize);
-        _graphView.Init(_graph);
+        _graphView.Init(_graph, _cellSize);
 
         for (int z = 0; z < _graphHeight; z++)
         {

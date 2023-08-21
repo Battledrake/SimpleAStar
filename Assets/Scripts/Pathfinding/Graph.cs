@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,14 +7,11 @@ public class Graph
     public Node[,] Nodes => _nodes;
     public int Width => _width;
     public int Height => _height;
-    public int CellSize => _cellSize;
 
     private Node[,] _nodes;
     private int[,] _mapData;
     private int _width;
     private int _height;
-    private int _cellSize;
-
 
     public static readonly Vector2Int[] CardinalDirections =
     {
@@ -42,7 +38,6 @@ public class Graph
         _connections = connections;
         _width = width;
         _height = height;
-        _cellSize = cellSize;
 
         _nodes = new Node[_width, _height];
         for (int z = 0; z < _height; z++)
