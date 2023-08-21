@@ -10,8 +10,6 @@ public class MapDataEditor : Editor
     SerializedProperty _textMap;
     SerializedProperty _textureMap;
 
-    SerializedProperty _blockedColor;
-    SerializedProperty _openColor;
     SerializedProperty _lightTerrainColor;
     SerializedProperty _mediumTerrainColor;
     SerializedProperty _heavyTerrainColor;
@@ -23,8 +21,6 @@ public class MapDataEditor : Editor
         _mapHeight = serializedObject.FindProperty("_mapHeight");
         _textMap = serializedObject.FindProperty("_textMap");
         _textureMap = serializedObject.FindProperty("_textureMap");
-        _blockedColor = serializedObject.FindProperty("_blockedColor");
-        _openColor = serializedObject.FindProperty("_openColor");
         _lightTerrainColor = serializedObject.FindProperty("_lightTerrainColor");
         _mediumTerrainColor = serializedObject.FindProperty("_mediumTerrainColor");
         _heavyTerrainColor = serializedObject.FindProperty("_heavyTerrainColor");
@@ -43,14 +39,11 @@ public class MapDataEditor : Editor
         }
         else if (_mapCreationType.enumValueIndex == 1)
         {
-            //EditorGUILayout.PropertyField(_textMap);
-            EditorGUILayout.ObjectField(_textMap, typeof(TextAsset));
+            EditorGUILayout.PropertyField(_textMap);
         }
         else
         {
             EditorGUILayout.PropertyField(_textureMap);
-            EditorGUILayout.PropertyField(_blockedColor);
-            EditorGUILayout.PropertyField(_openColor);
             EditorGUILayout.PropertyField(_lightTerrainColor);
             EditorGUILayout.PropertyField(_mediumTerrainColor);
             EditorGUILayout.PropertyField(_heavyTerrainColor);

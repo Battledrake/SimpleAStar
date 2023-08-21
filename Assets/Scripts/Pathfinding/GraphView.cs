@@ -26,15 +26,15 @@ public class GraphView : MonoBehaviour
 
             nodeView.Init(node._graphPosition, cellSize);
             _nodeViews[node._graphPosition.x, node._graphPosition.z] = nodeView;
-            nodeView.SetViewColorFromIsBlocked(false);
+            nodeView.SetNodeViewColor(Color.grey);
         }
     }
 
-    public void SetViewColorFromIsBlocked(GraphPosition graphPosition, bool isBlocked)
+    public void SetNodeViewColor(GraphPosition graphPosition, Color color)
     {
         if(_graph.IsWithinBounds(graphPosition) && IsValidNodeView(graphPosition))
         {
-            _nodeViews[graphPosition.x, graphPosition.z].SetViewColorFromIsBlocked(isBlocked);
+            _nodeViews[graphPosition.x, graphPosition.z].SetNodeViewColor(color);
         }
     }
 

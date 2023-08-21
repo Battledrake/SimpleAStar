@@ -3,14 +3,8 @@ using UnityEngine;
 
 public class DemoController : MonoBehaviour
 {
-    public enum Mode
-    {
-        PathFinding,
-        MapBuilding
-    }
     [SerializeField] private MapData _mapData;
     [SerializeField] private DemoUnit _demoUnit;
-    [SerializeField] private Mode _currentMode;
 
     //TODO: This will be used to stack paths for a waypoint like pathing
     private List<GraphPosition> _pathPositions;

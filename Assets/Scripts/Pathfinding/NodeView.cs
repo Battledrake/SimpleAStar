@@ -13,9 +13,6 @@ public class NodeView : MonoBehaviour
     [SerializeField] private GameObject _arrow;
     [SerializeField] private Renderer _tileRenderer;
 
-    [SerializeField] private Color _openColor;
-    [SerializeField] private Color _blockedColor;
-
     private GraphPosition _graphPosition;
 
     public void Init(GraphPosition graphPosition, int cellSize)
@@ -32,10 +29,9 @@ public class NodeView : MonoBehaviour
         //m_gText.text = node._distanceTravelled.ToString();
     }
 
-    public void SetViewColorFromIsBlocked(bool isBlocked)
+    public void SetNodeViewColor(Color color)
     {
-        Color setColor = isBlocked ? _blockedColor : _openColor;
-        _tileRenderer.material.SetColor("_CellColor", setColor);
+        _tileRenderer.material.SetColor("_CellColor", color);
     }
 
     //public void SetText()

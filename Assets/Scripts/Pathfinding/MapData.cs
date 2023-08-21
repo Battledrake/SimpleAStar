@@ -24,11 +24,12 @@ public class MapData : MonoBehaviour
     [SerializeField, HideInInspector] private TextAsset _textMap;
     [SerializeField, HideInInspector] private Texture2D _textureMap;
 
-    [SerializeField, HideInInspector] private Color32 _blockedColor = Color.black;
-    [SerializeField, HideInInspector] private Color32 _openColor = Color.white;
     [SerializeField, HideInInspector] private Color32 _lightTerrainColor = new Color32(124, 194, 78, 255);
     [SerializeField, HideInInspector] private Color32 _mediumTerrainColor = new Color32(252, 255, 52, 255);
     [SerializeField, HideInInspector] private Color32 _heavyTerrainColor = new Color32(255, 129, 12, 255);
+
+    [SerializeField] private Color32 _openColor = Color.grey;
+    [SerializeField] private Color32 _blockedColor = Color.black;
 
     [SerializeField] private int _cellSize = 1;
     [SerializeField] private GraphConnections _connections;
@@ -75,7 +76,7 @@ public class MapData : MonoBehaviour
     {
         if (_graph.IsWithinBounds(graphPosition))
         {
-            _graphView.SetViewColorFromIsBlocked(graphPosition, true);
+            _graphView.SetNodeViewColor(graphPosition, _blockedColor);
             _graph.SetNodeIsBlocked(graphPosition, true);
         }
     }
@@ -84,7 +85,7 @@ public class MapData : MonoBehaviour
     {
         if (_graph.IsWithinBounds(graphPosition))
         {
-            _graphView.SetViewColorFromIsBlocked(graphPosition, false);
+            _graphView.SetNodeViewColor(graphPosition, _openColor);
             _graph.SetNodeIsBlocked(graphPosition, false);
         }
     }
@@ -199,7 +200,7 @@ public class MapData : MonoBehaviour
             {
                 //TODO: Set Nodes to blocked
                 _graph.SetNodeIsBlocked(new GraphPosition(x, z), true);
-                _graphView.SetViewColorFromIsBlocked(new GraphPosition(x, z), true);
+                _graphView.SetNodeViewColor(new GraphPosition(x, z), _blockedColor);
             }
         }
     }
