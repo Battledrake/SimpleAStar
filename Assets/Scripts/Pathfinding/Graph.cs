@@ -80,7 +80,7 @@ public class Graph
         return null;
     }
 
-    public void SetNodeIsBlocked(GraphPosition graphPosition, bool isBlocked)
+    public void SetNodeBlockedState(GraphPosition graphPosition, bool isBlocked)
     {
         if (IsWithinBounds(graphPosition))
         {

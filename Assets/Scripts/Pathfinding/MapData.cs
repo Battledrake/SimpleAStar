@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public enum GraphConnections
 {
@@ -77,7 +78,7 @@ public class MapData : MonoBehaviour
         if (_graph.IsWithinBounds(graphPosition))
         {
             _graphView.SetNodeViewColor(graphPosition, _blockedColor);
-            _graph.SetNodeIsBlocked(graphPosition, true);
+            _graph.SetNodeBlockedState(graphPosition, true);
         }
     }
 
@@ -86,17 +87,17 @@ public class MapData : MonoBehaviour
         if (_graph.IsWithinBounds(graphPosition))
         {
             _graphView.SetNodeViewColor(graphPosition, _openColor);
-            _graph.SetNodeIsBlocked(graphPosition, false);
+            _graph.SetNodeBlockedState(graphPosition, false);
         }
     }
 
     private void SetupLookupTable()
     {
         _terrainLookupTable.Add(_openColor, 0);
-        _terrainLookupTable.Add(_lightTerrainColor, 1);
-        _terrainLookupTable.Add(_mediumTerrainColor, 2);
-        _terrainLookupTable.Add(_heavyTerrainColor, 3);
-        _terrainLookupTable.Add(_blockedColor, 9);
+        _terrainLookupTable.Add(_blockedColor, 1);
+        _terrainLookupTable.Add(_lightTerrainColor, 2);
+        _terrainLookupTable.Add(_mediumTerrainColor, 3);
+        _terrainLookupTable.Add(_heavyTerrainColor, 4);
     }
 
     public static Color GetColorFromTerrainCost(int terrainCost)
@@ -198,9 +199,18 @@ public class MapData : MonoBehaviour
         {
             for (int x = 0; x < _graphWidth; x++)
             {
-                //TODO: Set Nodes to blocked
-                _graph.SetNodeIsBlocked(new GraphPosition(x, z), true);
-                _graphView.SetNodeViewColor(new GraphPosition(x, z), _blockedColor);
+                if (lines.Count > 0)
+                {
+                    int lineValue = (int)Char.GetNumericValue(lines[z][x]);
+
+                    if (lineValue == 1)
+                    {
+                        _graph.SetNodeBlockedState(new GraphPosition(x, z), true);
+                        _graphView.SetNodeViewColor(new GraphPosition(x, z), _blockedColor);
+                    }
+                }
+                _graph.SetNodeBlockedState(new GraphPosition(x, z), false);
+                _graphView.SetNodeViewColor(new GraphPosition(x, z), _openColor);
             }
         }
     }
