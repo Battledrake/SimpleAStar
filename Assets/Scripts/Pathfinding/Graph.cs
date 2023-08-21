@@ -2,26 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Graph : MonoBehaviour
+public class Graph
 {
-    public enum GraphConnections
-    {
-        Cardinal,
-        Eight
-    }
 
-    [SerializeField] private GraphConnections _connections;
-
+    private GraphConnections _connections;
 
     public Node[,] Nodes => _nodes;
     public int Width => _width;
     public int Height => _height;
+    public int CellSize => _cellSize;
 
     private Node[,] _nodes;
     private int[,] _mapData;
-    [SerializeField] private int _width;
-    [SerializeField] private int _height;
-    [SerializeField] private int _cellSize;
+    private int _width;
+    private int _height;
+    //TODO: should my graph have cellsize reference? The graph doesn't build based on cellsize, just simple ints.
+    //World is irrelevant to path Graph but might make things easier, like having positions on nodes.
+    private int _cellSize;
 
 
     public static readonly Vector2Int[] CardinalDirections =
@@ -44,8 +41,13 @@ public class Graph : MonoBehaviour
         new Vector2Int(-1, 1)
     };
 
-    public void Init()
+    public Graph(GraphConnections connections, int width, int height, int cellSize)
     {
+        _connections = connections;
+        _width = width;
+        _height = height;
+        _cellSize = cellSize;
+
         _nodes = new Node[_width, _height];
         for (int z = 0; z < _height; z++)
         {
@@ -69,35 +71,39 @@ public class Graph : MonoBehaviour
         }
     }
 
-    public void Init(int[,] mapData)
-    {
-        _mapData = mapData;
-        _width = mapData.GetLength(0);
-        _height = mapData.GetLength(1);
-        _nodes = new Node[_width, _height];
-        for (int z = 0; z < _height; z++)
-        {
-            for (int x = 0; x < _width; x++)
-            {
-                bool isBlocked = mapData[x, z] == 9;
-                int terrainCost = mapData[x, z];
-                GraphPosition graphPosition = new GraphPosition(x, z);
-                Node newNode = new Node(graphPosition, terrainCost, isBlocked);
-                _nodes[x, z] = newNode;
+    //public void Init()
+    //{
+    //}
 
-                newNode._position = new Vector3(x * _cellSize, 0, z * _cellSize);
-            }
-        }
+    //public void Init(int[,] mapData)
+    //{
+    //    _mapData = mapData;
+    //    _width = mapData.GetLength(0);
+    //    _height = mapData.GetLength(1);
+    //    _nodes = new Node[_width, _height];
+    //    for (int z = 0; z < _height; z++)
+    //    {
+    //        for (int x = 0; x < _width; x++)
+    //        {
+    //            bool isBlocked = mapData[x, z] == 9;
+    //            int terrainCost = mapData[x, z];
+    //            GraphPosition graphPosition = new GraphPosition(x, z);
+    //            Node newNode = new Node(graphPosition, terrainCost, isBlocked);
+    //            _nodes[x, z] = newNode;
 
-        for (int z = 0; z < _height; z++)
-        {
-            for (int x = 0; x < _width; x++)
-            {
-                if (!_nodes[x, z]._isBlocked)
-                    _nodes[x, z]._neighbors = GetNeighbors(new GraphPosition(x, z));
-            }
-        }
-    }
+    //            newNode._position = new Vector3(x * _cellSize, 0, z * _cellSize);
+    //        }
+    //    }
+
+    //    for (int z = 0; z < _height; z++)
+    //    {
+    //        for (int x = 0; x < _width; x++)
+    //        {
+    //            if (!_nodes[x, z]._isBlocked)
+    //                _nodes[x, z]._neighbors = GetNeighbors(new GraphPosition(x, z));
+    //        }
+    //    }
+    //}
 
     public void ResetNodes()
     {
@@ -107,6 +113,23 @@ public class Graph : MonoBehaviour
             {
                 _nodes[x, y].Reset();
             }
+        }
+    }
+
+    public Node GetNodeFromGraphPosition(GraphPosition graphPosition)
+    {
+        if (IsWithinBounds(graphPosition))
+        {
+            return _nodes[graphPosition.x, graphPosition.z];
+        }
+        return null;
+    }
+
+    public void SetNodeIsBlocked(GraphPosition graphPosition, bool isBlocked)
+    {
+        if (IsWithinBounds(graphPosition))
+        {
+            _nodes[graphPosition.x, graphPosition.z]._isBlocked = isBlocked;
         }
     }
 

@@ -9,75 +9,38 @@ public class NodeView : MonoBehaviour
     [SerializeField] private TextMeshProUGUI m_gText;
     [SerializeField] private TextMeshProUGUI m_fText;
 
-    public GameObject _tile;
-    public GameObject _arrow;
-    
+    [SerializeField] private GameObject _tile;
+    [SerializeField] private GameObject _arrow;
+    [SerializeField] private Renderer _tileRenderer;
 
-    [Range(0, 0.5f)]
-    public float _borderSize = 0.15f;
+    [SerializeField] private Color _openColor;
+    [SerializeField] private Color _blockedColor;
 
-    public Node _node;
+    private GraphPosition _graphPosition;
 
-    public void Init(Node node)
+    public void Init(GraphPosition graphPosition, int scale)
     {
-        _node = node;
+        _graphPosition = graphPosition;
+
         if(_tile != null)
         {
-            this.gameObject.name = $"Node({_node._graphPosition})";
-            this.gameObject.transform.position = node._position;
+            this.gameObject.name = $"Node({_graphPosition})";
+            this.gameObject.transform.position = new Vector3(_graphPosition.x, 0, _graphPosition.z);
 
-            _tile.transform.localScale = new Vector3(1f - _borderSize, 1f, 1f - _borderSize);
+            this.transform.localScale = new Vector3(1f * scale, 1f, 1f * scale);
         }
-
-        EnableObject(_arrow, false);
-        m_gText.text = node._distanceTravelled.ToString();
+        //m_gText.text = node._distanceTravelled.ToString();
     }
 
-    private void ColorNode(Color color, GameObject nodeObject)
+    public void SetViewColorFromIsBlocked(bool isBlocked)
     {
-        if(nodeObject!= null)
-        {
-            Renderer nodeObjectRenderer = nodeObject.GetComponent<Renderer>();
-            nodeObjectRenderer.material.color = color;
-        }
+        Color setColor = isBlocked ? _blockedColor : _openColor;
+        _tileRenderer.material.SetColor("_CellColor", setColor);
     }
 
-    public void ColorNode(Color color)
-    {
-        ColorNode(color, _tile);
-    }
-
-    public void ColorNodeDefaultColor()
-    {
-        ColorNode(MapData.GetColorFromTerrainCost(_node._terrainCost));
-    }
-
-    private void EnableObject(GameObject go, bool state)
-    {
-        go.SetActive(state);
-    }
-
-    public void SetText()
-    {
-        m_gText.text = _node._graphPosition.ToString();
-        m_fText.text = _node._isBlocked.ToString();
-    }
-
-    public void ShowArrow(Color color)
-    {
-        if(_node != null && _arrow != null && _node._previous != null)
-        {
-            EnableObject(_arrow, true);
-
-            Vector3 dirToPrevious = _node._previous._position - _node._position;
-            dirToPrevious.Normalize();
-            _arrow.transform.rotation = Quaternion.LookRotation(dirToPrevious);
-
-            Renderer arrowRenderer = _arrow.GetComponent<Renderer>(); ;
-            if(arrowRenderer != null)
-            {
-                arrowRenderer.material.color = color;
-            }
-        }
-    }
+    //public void SetText()
+    //{
+    //    m_gText.text = _node._graphPosition.ToString();
+    //    m_fText.text = _node._isBlocked.ToString();
+    //}
 }

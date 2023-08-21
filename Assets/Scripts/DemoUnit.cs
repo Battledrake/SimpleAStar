@@ -8,7 +8,7 @@ public class DemoUnit : MonoBehaviour
     [SerializeField] private float _rotateSpeed = 10f;
     [Tooltip("Toggle for showing debug path")]
     [SerializeField] private bool _drawDebugPath;
-    [Tooltip("How many spaces should this unit be allowed to move. Only used for debug drawlines")]
+    [Tooltip("How many spaces should this unit be allowed to move. Only used for debug drawlines atm")]
     [SerializeField] private int _moveAllowance;
 
     private List<Vector3> _pathPositions;
@@ -49,21 +49,27 @@ public class DemoUnit : MonoBehaviour
 
     private void DrawDebugPath()
     {
-        for(int i = _pathPositions.Count - 1; i > _currentPositionIndex; i--)
+        for (int i = _pathPositions.Count - 1; i >= _currentPositionIndex; i--)
         {
+            Vector3 lastPosition = this.transform.position;
+            if(i > _currentPositionIndex)
+            {
+                lastPosition = _pathPositions[i - 1];
+            }
             Color activeColor = i < _moveAllowance ? Color.green : Color.red;
-            Debug.DrawLine(_pathPositions[i], _pathPositions[i - 1], activeColor);
+            Debug.DrawLine(_pathPositions[i], lastPosition, activeColor);
         }
     }
 
-    public void Move(List<Node> pathNodes)
+    public void Move(List<GraphPosition> pathPositions)
     {
+        if (pathPositions.Count <= 0) return;
+
         _pathPositions = new List<Vector3>();
 
-        foreach (Node node in pathNodes)
+        foreach (GraphPosition position in pathPositions)
         {
-            Debug.Log(node._position);
-            _pathPositions.Add(node._position);
+            _pathPositions.Add(new Vector3(position.x, 0, position.z));
             _currentPositionIndex = 0;
         }
         _isMoving = true;

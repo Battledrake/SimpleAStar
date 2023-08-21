@@ -5,36 +5,86 @@ using System.Linq;
 using System;
 using UnityEngine.SceneManagement;
 
+public enum GraphConnections
+{
+    Cardinal,
+    Eight
+}
+
 public class MapData : MonoBehaviour
 {
-    public int _width = 10;
-    public int _height = 5;
+    [SerializeField] private int _mapWidth = 10;
+    [SerializeField] private int _mapHeight = 10;
+    [SerializeField] private int _cellSize = 1;
+    [SerializeField] private GraphConnections _connections;
+    [SerializeField] private GraphView _graphView;
+    [SerializeField] private Pathfinder _pathfinder;
 
-    public TextAsset _textAsset;
-    public Texture2D _textureMap;
-    public string _resourcePath = "MapData";
+    [SerializeField] private TextAsset _textMap;
+    [SerializeField] private Texture2D _textureMap;
+    [Tooltip("Path to auto load data if not inserted")]
+    [SerializeField] private string _resourcePath = "MapData";
 
-    public Color32 _blockedColor = Color.black;
-    public Color32 _openTerrainColor = Color.white;
-    public Color32 _lightTerrainColor = new Color32(124, 194, 78, 255);
-    public Color32 _mediumTerrainColor = new Color32(252, 255, 52, 255);
-    public Color32 _heavyTerrainColor = new Color32(255, 129, 12, 255);
+    [SerializeField] private Color32 _blockedColor = Color.black;
+    [SerializeField] private Color32 _openTerrainColor = Color.white;
+    [SerializeField] private Color32 _lightTerrainColor = new Color32(124, 194, 78, 255);
+    [SerializeField] private Color32 _mediumTerrainColor = new Color32(252, 255, 52, 255);
+    [SerializeField] private Color32 _heavyTerrainColor = new Color32(255, 129, 12, 255);
+
+    public Graph GetGraph() => _graph;
 
     private static Dictionary<Color32, int> _terrainLookupTable = new Dictionary<Color32, int>();
+
+    private Graph _graph;
 
     private void Awake()
     {
         SetupLookupTable();
 
-        string levelName = SceneManager.GetActiveScene().name;
-        if (_textureMap == null && _textAsset == null)
-        {
-            _textureMap = Resources.Load<Texture2D>(_resourcePath + "/" + levelName);
-        }
+        _graph = new Graph(_connections, _mapWidth, _mapHeight, _cellSize);
+        _graphView.Init(_graph);
 
-        if(_textAsset == null)
+        //string levelName = SceneManager.GetActiveScene().name;
+        //if (_textureMap == null && _textMap == null)
+        //{
+        //    _textureMap = Resources.Load<Texture2D>(_resourcePath + "/" + levelName);
+        //}
+
+        //if(_textMap == null)
+        //{
+        //    _textMap = Resources.Load<TextAsset>(_resourcePath + "/" + levelName);
+        //}
+    }
+
+    public PathResult FindPath(GraphPosition startPosition, GraphPosition endPosition, out List<GraphPosition> pathPositions)
+    {
+        pathPositions = new List<GraphPosition>();
+        PathResult checkResult = _pathfinder.FindPath(startPosition, endPosition, _graph, ref pathPositions);
+        return checkResult;
+    }
+
+    public GraphPosition GetGraphPositionFromWorld(Vector3 worldPosition)
+    {
+        return new GraphPosition(
+            Mathf.RoundToInt(worldPosition.x / _cellSize),
+            Mathf.RoundToInt(worldPosition.z / _cellSize));
+    }
+
+    public void SetGraphPositionBlocked(GraphPosition graphPosition)
+    {
+        if (_graph.IsWithinBounds(graphPosition))
         {
-            _textAsset = Resources.Load<TextAsset>(_resourcePath + "/" + levelName);
+            _graphView.SetViewColorFromIsBlocked(graphPosition, true);
+            _graph.SetNodeIsBlocked(graphPosition, true);
+        }
+    }
+
+    public void SetGraphPositionUnblocked(GraphPosition graphPosition)
+    {
+        if (_graph.IsWithinBounds(graphPosition))
+        {
+            _graphView.SetViewColorFromIsBlocked(graphPosition, false);
+            _graph.SetNodeIsBlocked(graphPosition, false);
         }
     }
 
@@ -107,12 +157,12 @@ public class MapData : MonoBehaviour
 
     public void SetDimensions(List<string> textLines)
     {
-        _height = textLines.Count;
+        _mapHeight = textLines.Count;
         foreach (string line in textLines)
         {
-            if (line.Length > _width)
+            if (line.Length > _mapWidth)
             {
-                _width = line.Length;
+                _mapWidth = line.Length;
             }
         }
     }
@@ -127,15 +177,15 @@ public class MapData : MonoBehaviour
         }
         else
         {
-            lines = GetMapFromTextFile(_textAsset);
+            lines = GetMapFromTextFile(_textMap);
         }
 
         SetDimensions(lines);
 
-        int[,] map = new int[_width, _height];
-        for (int y = 0; y < _height; y++)
+        int[,] map = new int[_mapWidth, _mapHeight];
+        for (int y = 0; y < _mapHeight; y++)
         {
-            for (int x = 0; x < _width; x++)
+            for (int x = 0; x < _mapWidth; x++)
             {
                 if (lines[y].Length > x)
                 {

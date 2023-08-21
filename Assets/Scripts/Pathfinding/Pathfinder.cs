@@ -28,8 +28,9 @@ public class Pathfinder : MonoBehaviour
     {
         AllNonBlocked,
         NoSharpDiagonals,
-        NoDiagonalBetweenWalls,
+        SharpDiagonals,
     }
+
     [Tooltip("Formulas for calculating estimated cost of travel from current node to goal.")]
     [SerializeField] private CalculationType _heuristicCost;
     [Tooltip("Formulas for calculating cost of travel between each node.")]
@@ -58,8 +59,11 @@ public class Pathfinder : MonoBehaviour
         Instance = this;
     }
 
-    public PathResult FindPath(Node startNode, Node goalNode, Graph graph, ref List<Node> outPath)
+    public PathResult FindPath(GraphPosition startPosition, GraphPosition endPosition, Graph graph, ref List<GraphPosition> outPath)
     {
+        Node startNode = graph.GetNodeFromGraphPosition(startPosition);
+        Node goalNode = graph.GetNodeFromGraphPosition(endPosition);
+
         if (startNode == null || goalNode == null)
             return PathResult.SearchFail;
         if (startNode == goalNode)
@@ -91,7 +95,7 @@ public class Pathfinder : MonoBehaviour
 
         if (pathResult == PathResult.SearchSuccess || _allowPartialSolution)
         {
-            outPath = GetPathNodes(bestNode);
+            outPath = ConvertPathToGraphPositions(bestNode);
 
             Debug.Log($"PATHFINDER path length = {outPath.Count()}");
         }
@@ -149,28 +153,28 @@ public class Pathfinder : MonoBehaviour
         return true;
     }
 
-    public List<Node> GetPathNodes(Node endNode)
+    public List<GraphPosition> ConvertPathToGraphPositions(Node endNode)
     {
-        List<Node> path = new List<Node>();
+        List<GraphPosition> graphPositions = new List<GraphPosition>();
 
-        path.Add(endNode);
+        graphPositions.Add(endNode._graphPosition);
 
         Node currentNode = endNode;
 
-        int pathLength = path.Count;
+        int pathLength = graphPositions.Count;
         while(currentNode._previous != null)
         {
-            path.Add(currentNode._previous);
+            graphPositions.Add(currentNode._previous._graphPosition);
             currentNode = currentNode._previous;
             pathLength++;
         }
 
         if (!_includeStartNodeInPath)
-            path.RemoveAt(pathLength - 1);
+            graphPositions.RemoveAt(pathLength - 1);
 
-        path.Reverse();
+        graphPositions.Reverse();
 
-        return path;
+        return graphPositions;
     }
 
     private float GetHeuristicCost(Node source, Node target)
