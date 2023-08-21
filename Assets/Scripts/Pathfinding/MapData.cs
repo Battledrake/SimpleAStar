@@ -49,13 +49,6 @@ public class MapData : MonoBehaviour
         CreateGraph();
     }
 
-    public PathResult FindPath(GraphPosition startPosition, GraphPosition endPosition, out List<GraphPosition> pathPositions)
-    {
-        pathPositions = new List<GraphPosition>();
-        PathResult checkResult = Pathfinder.Instance.FindPath(startPosition, endPosition, _graph, ref pathPositions);
-        return checkResult;
-    }
-
     public GraphPosition GetGraphPositionFromWorld(Vector3 worldPosition)
     {
         return new GraphPosition(

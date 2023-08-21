@@ -31,7 +31,7 @@ public class DemoController : MonoBehaviour
                 {
                     GraphPosition startPosition = _mapData.GetGraphPositionFromWorld(_demoUnit.transform.position);
                     GraphPosition endPosition = _mapData.GetGraphPositionFromWorld(hitResult.point);
-                    PathResult checkResult = _mapData.FindPath(startPosition, endPosition, out List<GraphPosition> pathPositions);
+                    PathResult checkResult = Pathfinder.Instance.FindPath(startPosition, endPosition, _mapData.GetGraph(), out List<GraphPosition> pathPositions);
                     if (checkResult == PathResult.SearchSuccess || checkResult == PathResult.GoalUnreachable)
                     {
                         _demoUnit.Move(_mapData.GetWorldPositionsFromGraphPositions(pathPositions));

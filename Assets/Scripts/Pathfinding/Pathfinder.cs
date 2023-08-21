@@ -59,10 +59,12 @@ public class Pathfinder : MonoBehaviour
         Instance = this;
     }
 
-    public PathResult FindPath(GraphPosition startPosition, GraphPosition endPosition, Graph graph, ref List<GraphPosition> outPath)
+    public PathResult FindPath(GraphPosition startPosition, GraphPosition endPosition, Graph graph, out List<GraphPosition> outPath)
     {
         Node startNode = graph.GetNodeFromGraphPosition(startPosition);
         Node goalNode = graph.GetNodeFromGraphPosition(endPosition);
+
+        outPath = new List<GraphPosition>();
 
         if (startNode == null || goalNode == null)
             return PathResult.SearchFail;
