@@ -98,6 +98,11 @@ public class Graph
             {
                 node._neighbors[i]._neighbors = GetNeighbors(node._neighbors[i]._graphPosition);
             }
+
+            if (node._isBlocked)
+                node._neighbors.Clear();
+            else
+                node._neighbors = GetNeighbors(node._graphPosition);
         }
     }
 
