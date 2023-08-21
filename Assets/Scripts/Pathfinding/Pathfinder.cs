@@ -207,7 +207,11 @@ public class Pathfinder : MonoBehaviour
 
     private bool IsTraversalAllowed(Node source, Node target, Graph graph)
     {
-        if (target._isBlocked) return false;
+        if (target._isBlocked)
+        {
+            Debug.LogWarning("PATHFINDER: isBlocked was true, this shouldn't happen.");
+            return false;
+        }
 
         if (_traversalType == TraversalType.AllNonBlocked) return true;
 

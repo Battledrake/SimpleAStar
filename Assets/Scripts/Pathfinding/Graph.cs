@@ -67,40 +67,6 @@ public class Graph
         }
     }
 
-    //public void Init()
-    //{
-    //}
-
-    //public void Init(int[,] mapData)
-    //{
-    //    _mapData = mapData;
-    //    _width = mapData.GetLength(0);
-    //    _height = mapData.GetLength(1);
-    //    _nodes = new Node[_width, _height];
-    //    for (int z = 0; z < _height; z++)
-    //    {
-    //        for (int x = 0; x < _width; x++)
-    //        {
-    //            bool isBlocked = mapData[x, z] == 9;
-    //            int terrainCost = mapData[x, z];
-    //            GraphPosition graphPosition = new GraphPosition(x, z);
-    //            Node newNode = new Node(graphPosition, terrainCost, isBlocked);
-    //            _nodes[x, z] = newNode;
-
-    //            newNode._position = new Vector3(x * _cellSize, 0, z * _cellSize);
-    //        }
-    //    }
-
-    //    for (int z = 0; z < _height; z++)
-    //    {
-    //        for (int x = 0; x < _width; x++)
-    //        {
-    //            if (!_nodes[x, z]._isBlocked)
-    //                _nodes[x, z]._neighbors = GetNeighbors(new GraphPosition(x, z));
-    //        }
-    //    }
-    //}
-
     public void ResetNodes()
     {
         for(int x = 0; x < _width; ++x)
@@ -125,7 +91,13 @@ public class Graph
     {
         if (IsWithinBounds(graphPosition))
         {
-            _nodes[graphPosition.x, graphPosition.z]._isBlocked = isBlocked;
+            Node node = GetNodeFromGraphPosition(graphPosition);
+            node._isBlocked = isBlocked;
+
+            for (int i = 0; i < node._neighbors.Count; i++)
+            {
+                node._neighbors[i]._neighbors = GetNeighbors(node._neighbors[i]._graphPosition);
+            }
         }
     }
 
