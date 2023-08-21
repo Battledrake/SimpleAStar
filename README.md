@@ -8,8 +8,9 @@ Only supports 2D square-grid based pathfinding with hex to come later when there
 
 Code was designed for ease of use, extensibility, and adaptability. Classes are kept minimalistic, following good Design Patterns.
 
-Pathfinding is done by creating a graph with a width and height. Afterwords, a path can be found by calling into the Pathfinder Instance's FindPath method and passing in a start node, end node, the graph, and a list of nodes to be returned.
-The pathfinder will return a result on whether it failed, succeeded, or if the goal was reachable.
+Pathfinding is done by creating a graph with a width and height and cellsize. Afterwords, a path can be found by calling into the Pathfinder Instance's FindPath method and passing in a start GraphPosition, end GraphPosition, the graph to path with(meaning many graphs can be created on top of one another if needed), and a list of GraphPositions to be returned. Currently accessed through the MapData class.
+
+The pathfinder will return a result on whether it failed, succeeded, or if the goal was unreachable. Unreachable goals can still be returned with _allowPartialSolution, giving a path to the closest reachable position.
 
 Simple to use customization options include an enum to set for the type of directional movement on the graph. This would be 4 way direction or 8.
 
@@ -22,6 +23,8 @@ My algorithm shares a lot of similarities to the one used by Unreal Engine, as i
 
 Optimizations in my algorithm include bool checks for isOpen and isClosed instead of closed list creation and open/closed list checks. PriorityQueue for open list. Neighborlist creation during Graph build with blocked node exclusion to reduce node checks. Replacement of List.Insert with Reverse() for improved log. DiagonalShortcut choice for sqrt calculation avoidance if desired. 
 
-Current features include map creation via text or texture image, reading in values to set blocked nodes and even terrain. Left-click and path. Right-click and waypoint path.
+Currently Disabled Features: map creation via text or texture image, reading in values to set blocked nodes and even terrain. Left-click and path. Right-click and waypoint path.
 
-Future implementations will be a basic unit with selection and pathing. Grid creation outside of textures/text files. Better graph and nodeview implementations while keeping with MVC pattern. Possible splitting of the Node class to have pathfinding nodes and nodes used for game unit information. Top down camera and movement. Hex grid creations. 3D grid-based pathfinding.
+Active Features: Map creation with MapData settings. Left-Click opens nodes on grid, right click sets them to blocked. Shift + Left-Click paths. If a blocked node changes while unit is moving, re-pathing is not done. Don't think this is a feature I want to implement.
+
+Future Implementations: Unit Selection. Top down camera and movement. Hex grid creations. 3D grid-based pathfinding. Map building system? (Will probably be a separate tool).
