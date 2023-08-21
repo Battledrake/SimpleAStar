@@ -23,8 +23,6 @@ My algorithm shares a lot of similarities to the one used by Unreal Engine, as i
 
 Optimizations in my algorithm include bool checks for isOpen and isClosed instead of closed list creation and open/closed list checks. PriorityQueue for open list. Neighborlist creation during Graph build with blocked node exclusion to reduce node checks. Replacement of List.Insert with Reverse() for improved log. DiagonalShortcut choice for sqrt calculation avoidance if desired. 
 
-Currently Disabled Features: map creation via text or texture image, reading in values to set blocked nodes and even terrain. Left-click and path. Right-click and waypoint path.
+Active Features: Map creation via inspector values, text file, or texture. Left-Click opens nodes on grid, right click sets them to blocked. Shift + Left-Click paths. If a blocked node changes while unit is moving, re-pathing is not done.
 
-Active Features: Map creation with MapData settings. Left-Click opens nodes on grid, right click sets them to blocked. Shift + Left-Click paths. If a blocked node changes while unit is moving, re-pathing is not done. Don't think this is a feature I want to implement.
-
-Future Implementations: Unit Selection. Top down camera and movement. Hex grid creations. 3D grid-based pathfinding. Map building system? (Will probably be a separate tool).
+Future Implementations: Unit Selection. Top down camera and movement. Hex grid creations. 3D grid-based pathfinding. Map building system? (Will probably be a separate tool). Nav Unit component that functions like a NavAgent, taking a Vector3 position and calling the pathing itself (real-time updating);
