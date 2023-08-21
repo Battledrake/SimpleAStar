@@ -6,6 +6,7 @@ public class GraphView : MonoBehaviour
 
     private NodeView[,] _nodeViews;
     private Graph _graph;
+    private GameObject _nodeViewContainer;
 
     public void Init(Graph graph, int cellSize)
     {
@@ -18,11 +19,13 @@ public class GraphView : MonoBehaviour
 
         _nodeViews = new NodeView[graph.Width, graph.Height];
 
-        GameObject nodeViewParent = new GameObject("[NodeViews]");
+        _nodeViewContainer = new GameObject("[NodeViews]");
+        _nodeViewContainer.transform.parent = this.transform;
+        _nodeViewContainer.transform.localPosition = new Vector3(0f, 0.01f, 0f);
 
         foreach (Node node in _graph.Nodes)
         {
-            NodeView nodeView = Instantiate<NodeView>(_nodeViewPrefab, nodeViewParent.transform);
+            NodeView nodeView = Instantiate<NodeView>(_nodeViewPrefab, _nodeViewContainer.transform);
 
             nodeView.Init(node._graphPosition, cellSize);
             _nodeViews[node._graphPosition.x, node._graphPosition.z] = nodeView;
@@ -41,5 +44,15 @@ public class GraphView : MonoBehaviour
     private bool IsValidNodeView(GraphPosition graphPosition)
     {
         return _nodeViews[graphPosition.x, graphPosition.z] != null;
+    }
+
+    public void HideGraphView()
+    {
+        _nodeViewContainer.SetActive(false);
+    }
+
+    public void ShowGraphView()
+    {
+        _nodeViewContainer.SetActive(true);
     }
 }

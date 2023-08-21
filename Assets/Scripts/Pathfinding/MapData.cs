@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System;
+using UnityEditor;
 
 public enum GraphConnections
 {
@@ -29,12 +30,14 @@ public class MapData : MonoBehaviour
     [SerializeField, HideInInspector] private Color32 _mediumTerrainColor = new Color32(252, 255, 52, 255);
     [SerializeField, HideInInspector] private Color32 _heavyTerrainColor = new Color32(255, 129, 12, 255);
 
+    [SerializeField] private int _cellSize = 1;
+
     [SerializeField] private Color32 _openColor = Color.grey;
     [SerializeField] private Color32 _blockedColor = Color.black;
 
-    [SerializeField] private int _cellSize = 1;
     [SerializeField] private GraphConnections _connections;
     [SerializeField] private GraphView _graphView;
+    [SerializeField] private bool _hideGraphViewOnPlay;
 
     public Graph GetGraph() => _graph;
 
@@ -51,16 +54,34 @@ public class MapData : MonoBehaviour
         CreateGraph();
     }
 
+    private void OnDrawGizmos()
+    {
+        if (_mapCreationType == MapCreationType.InspectorValues
+            && Selection.activeGameObject == this.gameObject)
+        {
+            Gizmos.color = Color.cyan;
+            Vector3 position = this.transform.position;
+            Vector3 cubeCenter = new Vector3(
+                position.x + _mapWidth * _cellSize * 0.5f,
+                this.transform.position.y,
+                position.z + _mapHeight * _cellSize * 0.5f);
+            Gizmos.DrawWireCube(cubeCenter, new Vector3(_mapWidth * _cellSize, 0.5f, _mapHeight * _cellSize));
+        }
+    }
+
     public GraphPosition GetGraphPositionFromWorld(Vector3 worldPosition)
     {
         return new GraphPosition(
-            Mathf.RoundToInt(worldPosition.x / _cellSize),
-            Mathf.RoundToInt(worldPosition.z / _cellSize));
+            Mathf.FloorToInt((worldPosition.x - this.transform.position.x) / _cellSize),
+            Mathf.FloorToInt((worldPosition.z - this.transform.position.z) / _cellSize));
     }
 
     public Vector3 GetWorldPositionFromGraphPosition(GraphPosition graphPosition)
     {
-        return new Vector3(graphPosition.x * _cellSize, 0f, graphPosition.z * _cellSize);
+        return new Vector3(
+            this.transform.position.x + graphPosition.x * _cellSize + _cellSize * 0.5f,
+            this.transform.position.y,
+            this.transform.position.z + graphPosition.z * _cellSize + _cellSize * 0.5f);
     }
 
     public List<Vector3> GetWorldPositionsFromGraphPositions(List<GraphPosition> graphPositions)
@@ -68,7 +89,10 @@ public class MapData : MonoBehaviour
         List<Vector3> vectorList = new List<Vector3>();
         foreach (GraphPosition position in graphPositions)
         {
-            vectorList.Add(new Vector3(position.x * _cellSize, 0f, position.z * _cellSize));
+            vectorList.Add(new Vector3(
+                this.transform.position.x + position.x * _cellSize + _cellSize * 0.5f,
+                this.transform.position.y,
+                this.transform.position.z + position.z * _cellSize + _cellSize * 0.5f));
         }
         return vectorList;
     }
@@ -77,8 +101,8 @@ public class MapData : MonoBehaviour
     {
         if (_graph.IsWithinBounds(graphPosition))
         {
-            _graphView.SetNodeViewColor(graphPosition, _blockedColor);
             _graph.SetNodeBlockedState(graphPosition, true);
+            _graphView.SetNodeViewColor(graphPosition, _blockedColor);
         }
     }
 
@@ -86,8 +110,8 @@ public class MapData : MonoBehaviour
     {
         if (_graph.IsWithinBounds(graphPosition))
         {
-            _graphView.SetNodeViewColor(graphPosition, _openColor);
             _graph.SetNodeBlockedState(graphPosition, false);
+            _graphView.SetNodeViewColor(graphPosition, _openColor);
         }
     }
 
@@ -190,8 +214,6 @@ public class MapData : MonoBehaviour
         if (lines.Count > 0)
             SetDimensions(lines);
 
-        //FIX: Realize that can't change connections at runtime, might want to change that.
-        //Also create graph with blocked nodes needs to be re-implemented.
         _graph = new Graph(_connections, _graphWidth, _graphHeight, _cellSize);
         _graphView.Init(_graph, _cellSize);
 
@@ -212,6 +234,11 @@ public class MapData : MonoBehaviour
                 _graph.SetNodeBlockedState(new GraphPosition(x, z), false);
                 _graphView.SetNodeViewColor(new GraphPosition(x, z), _openColor);
             }
+        }
+
+        if (_hideGraphViewOnPlay)
+        {
+            _graphView.HideGraphView();
         }
     }
 }
