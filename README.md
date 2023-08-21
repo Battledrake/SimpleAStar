@@ -2,7 +2,7 @@
 
 A work in progress A* pathfinding tool for use in Unity.
 
-The purpose of this tool was to be a simple but easily extensible tool to make grid based movement games. The tool should be able to drag and drop into any game, while giving simple to use customization options to get the right pathfinding feel for the various needs.
+The purpose of this tool is to be a simple but easily extensible tool to make grid based movement games. The tool should be able to drag and drop into any game, while giving simple to use customization options to get the right pathfinding feel for the various needs.
 
 Only supports 2D square-grid based pathfinding with hex to come later when there's a need for it. The same applies for 3D graphs.
 
