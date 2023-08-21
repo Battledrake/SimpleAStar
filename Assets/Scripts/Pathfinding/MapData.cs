@@ -70,6 +70,21 @@ public class MapData : MonoBehaviour
             Mathf.RoundToInt(worldPosition.z / _cellSize));
     }
 
+    public Vector3 GetWorldPositionFromGraphPosition(GraphPosition graphPosition)
+    {
+        return new Vector3(graphPosition.x * _cellSize, 0f, graphPosition.z * _cellSize);
+    }
+
+    public List<Vector3> GetWorldPositionsFromGraphPositions(List<GraphPosition> graphPositions)
+    {
+        List<Vector3> vectorList = new List<Vector3>();
+        foreach(GraphPosition position in graphPositions)
+        {
+            vectorList.Add(new Vector3(position.x * _cellSize, 0f, position.z * _cellSize));
+        }
+        return vectorList;
+    }
+
     public void SetGraphPositionBlocked(GraphPosition graphPosition)
     {
         if (_graph.IsWithinBounds(graphPosition))

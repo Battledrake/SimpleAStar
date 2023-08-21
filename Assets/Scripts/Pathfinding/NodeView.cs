@@ -18,16 +18,16 @@ public class NodeView : MonoBehaviour
 
     private GraphPosition _graphPosition;
 
-    public void Init(GraphPosition graphPosition, int scale)
+    public void Init(GraphPosition graphPosition, int cellSize)
     {
         _graphPosition = graphPosition;
 
-        if(_tile != null)
+        if (_tile != null)
         {
             this.gameObject.name = $"Node({_graphPosition})";
-            this.gameObject.transform.position = new Vector3(_graphPosition.x, 0, _graphPosition.z);
+            this.gameObject.transform.position = new Vector3(_graphPosition.x * cellSize, 0, _graphPosition.z * cellSize);
 
-            this.transform.localScale = new Vector3(1f * scale, 1f, 1f * scale);
+            this.transform.localScale = new Vector3(1f * cellSize, 1f, 1f * cellSize);
         }
         //m_gText.text = node._distanceTravelled.ToString();
     }

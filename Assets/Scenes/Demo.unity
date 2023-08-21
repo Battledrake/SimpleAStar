@@ -205,7 +205,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _mapWidth: 10
   _mapHeight: 10
-  _cellSize: 1
+  _cellSize: 2
   _connections: 1
   _graphView: {fileID: 335146464}
   _pathfinder: {fileID: 335146465}

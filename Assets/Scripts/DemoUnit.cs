@@ -61,17 +61,14 @@ public class DemoUnit : MonoBehaviour
         }
     }
 
-    public void Move(List<GraphPosition> pathPositions)
+    public void Move(List<Vector3> pathPositions)
     {
         if (pathPositions.Count <= 0) return;
 
-        _pathPositions = new List<Vector3>();
+        _pathPositions = pathPositions;
 
-        foreach (GraphPosition position in pathPositions)
-        {
-            _pathPositions.Add(new Vector3(position.x, 0, position.z));
-            _currentPositionIndex = 0;
-        }
+        _currentPositionIndex = 0;
+
         _isMoving = true;
     }
 }

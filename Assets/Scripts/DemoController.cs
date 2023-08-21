@@ -34,7 +34,7 @@ public class DemoController : MonoBehaviour
                     PathResult checkResult = _mapData.FindPath(startPosition, endPosition, out List<GraphPosition> pathPositions);
                     if (checkResult == PathResult.SearchSuccess || checkResult == PathResult.GoalUnreachable)
                     {
-                        _demoUnit.Move(pathPositions);
+                        _demoUnit.Move(_mapData.GetWorldPositionsFromGraphPositions(pathPositions));
                     }
                 }
             }

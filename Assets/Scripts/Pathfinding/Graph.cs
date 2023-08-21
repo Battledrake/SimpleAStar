@@ -16,8 +16,6 @@ public class Graph
     private int[,] _mapData;
     private int _width;
     private int _height;
-    //TODO: should my graph have cellsize reference? The graph doesn't build based on cellsize, just simple ints.
-    //World is irrelevant to path Graph but might make things easier, like having positions on nodes.
     private int _cellSize;
 
 
