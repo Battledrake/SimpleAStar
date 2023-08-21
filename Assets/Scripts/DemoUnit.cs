@@ -6,6 +6,8 @@ public class DemoUnit : MonoBehaviour
 {
     [SerializeField] private float _moveSpeed = 4f;
     [SerializeField] private float _rotateSpeed = 10f;
+    [Tooltip("Distance from goal to stop.")]
+    [SerializeField] private float _stoppingDistance = 0.1f;
     [Tooltip("Toggle for showing debug path")]
     [SerializeField] private bool _drawDebugPath;
     [Tooltip("How many spaces should this unit be allowed to move. Only used for debug drawlines atm")]
@@ -25,9 +27,7 @@ public class DemoUnit : MonoBehaviour
 
             Vector3 targetPosition = _pathPositions[_currentPositionIndex];
 
-            float stopDistance = 0.1f;
-
-            if (Vector3.Distance(targetPosition, transform.position) > stopDistance)
+            if (Vector3.Distance(targetPosition, transform.position) > _stoppingDistance)
             {
                 Vector3 moveDirection = (targetPosition - transform.position).normalized;
 
