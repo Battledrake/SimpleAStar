@@ -18,7 +18,6 @@ public class MapData : MonoBehaviour
     [SerializeField] private int _cellSize = 1;
     [SerializeField] private GraphConnections _connections;
     [SerializeField] private GraphView _graphView;
-    [SerializeField] private Pathfinder _pathfinder;
 
     [SerializeField] private TextAsset _textMap;
     [SerializeField] private Texture2D _textureMap;
@@ -59,7 +58,7 @@ public class MapData : MonoBehaviour
     public PathResult FindPath(GraphPosition startPosition, GraphPosition endPosition, out List<GraphPosition> pathPositions)
     {
         pathPositions = new List<GraphPosition>();
-        PathResult checkResult = _pathfinder.FindPath(startPosition, endPosition, _graph, ref pathPositions);
+        PathResult checkResult = Pathfinder.Instance.FindPath(startPosition, endPosition, _graph, ref pathPositions);
         return checkResult;
     }
 
