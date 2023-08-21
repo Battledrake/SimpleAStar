@@ -203,18 +203,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd214b899ee110245abcc186d330f323, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mapCreationType: 1
+  _mapCreationType: 0
   _mapWidth: 10
   _mapHeight: 10
   _textMap: {fileID: 4900000, guid: d4110db368b865e40bfdece93bb91bde, type: 3}
   _textureMap: {fileID: 2800000, guid: 06c8075393f3af8488e9fc898fc5b885, type: 3}
-  _cellSize: 1
-  _connections: 1
-  _graphView: {fileID: 335146464}
   _blockedColor:
     serializedVersion: 2
     rgba: 4278190080
-  _openTerrainColor:
+  _openColor:
     serializedVersion: 2
     rgba: 4294967295
   _lightTerrainColor:
@@ -226,6 +223,9 @@ MonoBehaviour:
   _heavyTerrainColor:
     serializedVersion: 2
     rgba: 4279009791
+  _cellSize: 1
+  _connections: 1
+  _graphView: {fileID: 335146464}
 --- !u!4 &335146463
 Transform:
   m_ObjectHideFlags: 0

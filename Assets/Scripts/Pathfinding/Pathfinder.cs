@@ -74,14 +74,14 @@ public class Pathfinder : MonoBehaviour
 
         float timeStart = Time.realtimeSinceStartup;
 
-        startNode._distanceTravelled = 0;
-        startNode._priority = GetHeuristicCost(startNode, goalNode) * _heuristicScale;
+        startNode._traversalCost = 0;
+        startNode._totalCost = GetHeuristicCost(startNode, goalNode) * _heuristicScale;
 
         _frontierNodes.Enqueue(startNode);
         startNode._isOpened = true;
 
         Node bestNode = startNode;
-        float bestNodeCost = startNode._priority;
+        float bestNodeCost = startNode._totalCost;
         PathResult pathResult = PathResult.SearchSuccess;
 
         bool processNodes = true;
@@ -126,15 +126,15 @@ public class Pathfinder : MonoBehaviour
             if (_ignoreClosed && neighborNode._isClosed)
                 continue;
 
-            float newTraversalCost = GetTraversalCost(currentNode, neighborNode) + currentNode._distanceTravelled;
+            float newTraversalCost = GetTraversalCost(currentNode, neighborNode) + currentNode._traversalCost;
             float newHeuristic = GetHeuristicCost(neighborNode, goalNode) * _heuristicScale;
             float newTotalCost = newTraversalCost + newHeuristic;
 
-            if (newTotalCost >= neighborNode._priority)
+            if (newTotalCost >= neighborNode._totalCost)
                 continue;
 
-            neighborNode._distanceTravelled = newTraversalCost;
-            neighborNode._priority = newTotalCost;
+            neighborNode._traversalCost = newTraversalCost;
+            neighborNode._totalCost = newTotalCost;
             neighborNode._previous = currentNode;
             neighborNode._isClosed = false;
 

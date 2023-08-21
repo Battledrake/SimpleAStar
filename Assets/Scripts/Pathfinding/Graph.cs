@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class Graph
 {
-
     private GraphConnections _connections;
-
     public Node[,] Nodes => _nodes;
     public int Width => _width;
     public int Height => _height;
@@ -118,13 +116,6 @@ public class Graph
             return !_nodes[graphPosition.x, graphPosition.z]._isBlocked;
         }
         return false;
-    }
-
-    public GraphPosition GetGraphPositionFromWorld(Vector3 WorldPosition)
-    {
-        return new GraphPosition(
-            Mathf.FloorToInt(WorldPosition.x / _cellSize),
-            Mathf.FloorToInt(WorldPosition.z / _cellSize));
     }
 
     public List<Node> GetNeighbors(GraphPosition graphPosition)

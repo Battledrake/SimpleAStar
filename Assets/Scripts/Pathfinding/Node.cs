@@ -7,15 +7,14 @@ public class Node : IComparable<Node>
 {
     public GraphPosition _graphPosition;
 
-    public int _terrainCost;
+    public int _terrainCost = 0;
+
+    public float _traversalCost = Mathf.Infinity;
+    public float _totalCost = Mathf.Infinity;
 
     public List<Node> _neighbors = new List<Node>();
 
-    public float _distanceTravelled = Mathf.Infinity;
-
     public Node _previous = null;
-
-    public float _priority = Mathf.Infinity;
 
     public bool _isOpened = false;
     public bool _isClosed = false;
@@ -31,11 +30,11 @@ public class Node : IComparable<Node>
 
     public int CompareTo(Node other)
     {
-        if (this._priority < other._priority)
+        if (this._totalCost < other._totalCost)
         {
             return -1;
         }
-        else if (this._priority > other._priority)
+        else if (this._totalCost > other._totalCost)
         {
             return 1;
         }
@@ -47,9 +46,9 @@ public class Node : IComparable<Node>
 
     public void Reset()
     {
-        _distanceTravelled = Mathf.Infinity;
+        _traversalCost = Mathf.Infinity;
+        _totalCost = Mathf.Infinity;
         _previous = null;
-        _priority = Mathf.Infinity;
         _isOpened = false;
         _isClosed = false;
     }
