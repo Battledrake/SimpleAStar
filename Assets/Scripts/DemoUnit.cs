@@ -6,6 +6,10 @@ public class DemoUnit : MonoBehaviour
 {
     [SerializeField] private float _moveSpeed = 4f;
     [SerializeField] private float _rotateSpeed = 10f;
+    [Tooltip("Toggle for showing debug path")]
+    [SerializeField] private bool _drawDebugPath;
+    [Tooltip("How many spaces should this unit be allowed to move. Only used for debug drawlines")]
+    [SerializeField] private int _moveAllowance;
 
     private List<Vector3> _pathPositions;
     private int _currentPositionIndex;
@@ -16,6 +20,9 @@ public class DemoUnit : MonoBehaviour
     {
         if (_isMoving)
         {
+            if (_drawDebugPath)
+                DrawDebugPath();
+
             Vector3 targetPosition = _pathPositions[_currentPositionIndex];
 
             float stopDistance = 0.1f;
@@ -37,6 +44,15 @@ public class DemoUnit : MonoBehaviour
                     _isMoving = false;
                 }
             }
+        }
+    }
+
+    private void DrawDebugPath()
+    {
+        for(int i = _pathPositions.Count - 1; i > _currentPositionIndex; i--)
+        {
+            Color activeColor = i < _moveAllowance ? Color.green : Color.red;
+            Debug.DrawLine(_pathPositions[i], _pathPositions[i - 1], activeColor);
         }
     }
 

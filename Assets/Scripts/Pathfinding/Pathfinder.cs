@@ -1,8 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
 
 public enum PathResult
 {
@@ -92,6 +92,7 @@ public class Pathfinder : MonoBehaviour
         if (pathResult == PathResult.SearchSuccess || _allowPartialSolution)
         {
             outPath = GetPathNodes(bestNode);
+
             Debug.Log($"PATHFINDER path length = {outPath.Count()}");
         }
 

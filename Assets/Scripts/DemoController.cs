@@ -99,25 +99,25 @@ public class DemoController : MonoBehaviour
                 //}
             }
         }
-        if (Input.GetMouseButtonDown(1))
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hitResult))
-            {
-                NodeView nodeView = hitResult.collider.gameObject.GetComponentInParent<NodeView>();
-                if (nodeView != null)
-                {
-                    Node startNode = _pathNodes.Last();
+        //if (Input.GetMouseButtonDown(1))
+        //{
+        //    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        //    if (Physics.Raycast(ray, out RaycastHit hitResult))
+        //    {
+        //        NodeView nodeView = hitResult.collider.gameObject.GetComponentInParent<NodeView>();
+        //        if (nodeView != null)
+        //        {
+        //            Node startNode = _pathNodes.Last();
 
-                    List<Node> myPath = new List<Node>();
+        //            List<Node> myPath = new List<Node>();
 
-                    PathResult checkResult = _pathfinder.FindPath(startNode, nodeView._node, _graph, ref myPath);
+        //            PathResult checkResult = _pathfinder.FindPath(startNode, nodeView._node, _graph, ref myPath);
 
-                    _pathNodes.AddRange(myPath);
-                    _graphView.ColorNodes(_pathNodes, Color.red);
-                    Debug.Log(_pathNodes.Count);
-                }
-            }
-        }
+        //            _pathNodes.AddRange(myPath);
+        //            _graphView.ColorNodes(_pathNodes, Color.red);
+        //            Debug.Log(_pathNodes.Count);
+        //        }
+        //    }
+        //}
     }
 }

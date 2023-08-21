@@ -759,12 +759,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _heuristicCost: 1
-  _traversalCost: 0
+  _traversalCost: 1
   _traversalType: 2
   _heuristicScale: 1
   _allowPartialSolution: 1
   _ignoreClosed: 1
   _includeStartNodeInPath: 0
+  _drawDebugPath: 1
 --- !u!4 &1053259547
 Transform:
   m_ObjectHideFlags: 0
