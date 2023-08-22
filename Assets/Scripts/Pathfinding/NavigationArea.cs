@@ -5,7 +5,7 @@ using System;
 using UnityEditor;
 using Unity.VisualScripting;
 
-public enum GraphConnections
+public enum GraphConnectionType
 {
     Cardinal,
     Eight
@@ -18,18 +18,18 @@ public struct TerrainData
     public float _terrainCost;
 }
 
-public class MapData : MonoBehaviour
+public class NavigationArea : MonoBehaviour
 {
-    private enum MapCreationType
+    private enum GraphCreationType
     {
         InspectorValues,
         TextureMap
     }
 
-    [SerializeField, HideInInspector, RuntimeReadOnly] private MapCreationType _mapCreationType;
+    [SerializeField, HideInInspector, RuntimeReadOnly] private GraphCreationType _graphCreationType;
 
-    [SerializeField, HideInInspector, RuntimeReadOnly] private int _mapWidth = 10;
-    [SerializeField, HideInInspector, RuntimeReadOnly] private int _mapHeight = 10;
+    [SerializeField, HideInInspector, RuntimeReadOnly] private int _width = 10;
+    [SerializeField, HideInInspector, RuntimeReadOnly] private int _height = 10;
     [SerializeField, HideInInspector, RuntimeReadOnly] private Texture2D _textureMap;
 
     [SerializeField, RuntimeReadOnly] private int _cellSize = 1;
@@ -38,7 +38,7 @@ public class MapData : MonoBehaviour
     [SerializeField, RuntimeReadOnly] private Color32 _blockedColor = Color.black;
     [SerializeField] private List<TerrainData> _terrainData = new List<TerrainData>();
 
-    [SerializeField, RuntimeReadOnly] private GraphConnections _connections;
+    [SerializeField, RuntimeReadOnly] private GraphConnectionType _connectionType;
     [SerializeField, RuntimeReadOnly] private GraphView _graphView;
     [SerializeField, RuntimeReadOnly] private bool _hideGraphViewOnPlay;
 
@@ -55,16 +55,16 @@ public class MapData : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (_mapCreationType == MapCreationType.InspectorValues
+        if (_graphCreationType == GraphCreationType.InspectorValues
             && Selection.activeGameObject == this.gameObject)
         {
             Gizmos.color = Color.cyan;
             Vector3 position = this.transform.position;
             Vector3 cubeCenter = new Vector3(
-                position.x + _mapWidth * _cellSize * 0.5f,
+                position.x + _width * _cellSize * 0.5f,
                 this.transform.position.y,
-                position.z + _mapHeight * _cellSize * 0.5f);
-            Gizmos.DrawWireCube(cubeCenter, new Vector3(_mapWidth * _cellSize, 0.5f, _mapHeight * _cellSize));
+                position.z + _height * _cellSize * 0.5f);
+            Gizmos.DrawWireCube(cubeCenter, new Vector3(_width * _cellSize, 0.5f, _height * _cellSize));
         }
     }
 
@@ -123,7 +123,7 @@ public class MapData : MonoBehaviour
             float nodeCost = _graph.GetNodeTerrainCost(graphPositions[i]);
             if (nodeCost + totalTravel <= moveLimit)
             {
-                totalTravel += nodeCost + 1;
+                totalTravel += nodeCost + i + 1;
                 convertedList.Add(graphPositions[i]);
             }
             else
@@ -203,7 +203,7 @@ public class MapData : MonoBehaviour
         _graphHeight = textLines.Count;
         foreach (string line in textLines)
         {
-            if (line.Length > _mapWidth)
+            if (line.Length > _width)
             {
                 _graphWidth = line.Length;
             }
@@ -214,13 +214,13 @@ public class MapData : MonoBehaviour
     {
         List<string> lines = new List<string>();
 
-        switch (_mapCreationType)
+        switch (_graphCreationType)
         {
-            case MapCreationType.InspectorValues:
-                _graphWidth = _mapWidth;
-                _graphHeight = _mapHeight;
+            case GraphCreationType.InspectorValues:
+                _graphWidth = _width;
+                _graphHeight = _height;
                 break;
-            case MapCreationType.TextureMap:
+            case GraphCreationType.TextureMap:
                 _graphWidth = _textureMap.width;
                 _graphHeight = _textureMap.height;
                 break;
@@ -228,7 +228,7 @@ public class MapData : MonoBehaviour
         if (lines.Count > 0)
             SetDimensions(lines);
 
-        _graph = new Graph(_connections, _graphWidth, _graphHeight);
+        _graph = new Graph(_connectionType, _graphWidth, _graphHeight);
         _graphView.Init(_graph, _cellSize);
 
         for (int z = 0; z < _graphHeight; z++)
@@ -236,7 +236,7 @@ public class MapData : MonoBehaviour
             for (int x = 0; x < _graphWidth; x++)
             {
                 GraphPosition nodePosition = new GraphPosition(x, z);
-                if (_mapCreationType == MapCreationType.TextureMap)
+                if (_graphCreationType == GraphCreationType.TextureMap)
                 {
                     Color nodeColor = _textureMap.GetPixel(x, z);
                     float terrainCost = GetTerrainCostFromColor(nodeColor);

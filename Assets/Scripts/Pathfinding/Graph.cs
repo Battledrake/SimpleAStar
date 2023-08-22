@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Graph
 {
-    private GraphConnections _connections;
+    private GraphConnectionType _connections;
     public Node[,] Nodes => _nodes;
     public int Width => _width;
     public int Height => _height;
@@ -32,7 +32,7 @@ public class Graph
         new Vector2Int(-1, 1)
     };
 
-    public Graph(GraphConnections connections, int width, int height)
+    public Graph(GraphConnectionType connections, int width, int height)
     {
         _connections = connections;
         _width = width;
@@ -149,13 +149,13 @@ public class Graph
         return neighborNodes;
     }
 
-    public Vector2Int[] GetDirectionsByType(GraphConnections neighborType)
+    public Vector2Int[] GetDirectionsByType(GraphConnectionType neighborType)
     {
         switch (neighborType)
         {
-            case GraphConnections.Cardinal:
+            case GraphConnectionType.Cardinal:
                 return CardinalDirections;
-            case GraphConnections.Eight:
+            case GraphConnectionType.Eight:
                 return EightDirections;
             default:
                 return new Vector2Int[0];

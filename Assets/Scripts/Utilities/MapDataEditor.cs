@@ -1,32 +1,31 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(MapData))]
+[CustomEditor(typeof(NavigationArea))]
 public class MapDataEditor : Editor
 {
-    SerializedProperty _mapCreationType;
-    SerializedProperty _mapWidth;
-    SerializedProperty _mapHeight;
-    SerializedProperty _textMap;
+    SerializedProperty _graphCreationType;
+    SerializedProperty _width;
+    SerializedProperty _height;
     SerializedProperty _textureMap;
 
     private void OnEnable()
     {
-        _mapCreationType = serializedObject.FindProperty("_mapCreationType");
-        _mapWidth = serializedObject.FindProperty("_mapWidth");
-        _mapHeight = serializedObject.FindProperty("_mapHeight");
+        _graphCreationType = serializedObject.FindProperty("_graphCreationType");
+        _width = serializedObject.FindProperty("_width");
+        _height = serializedObject.FindProperty("_height");
         _textureMap = serializedObject.FindProperty("_textureMap");
     }
 
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
-        EditorGUILayout.PropertyField(_mapCreationType);
+        EditorGUILayout.PropertyField(_graphCreationType);
 
-        if (_mapCreationType.enumValueIndex == 0)
+        if (_graphCreationType.enumValueIndex == 0)
         {
-            EditorGUILayout.PropertyField(_mapWidth);
-            EditorGUILayout.PropertyField(_mapHeight);
+            EditorGUILayout.PropertyField(_width);
+            EditorGUILayout.PropertyField(_height);
         }
         else
         {

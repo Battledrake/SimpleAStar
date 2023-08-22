@@ -276,7 +276,7 @@ GameObject:
   - component: {fileID: 335146462}
   - component: {fileID: 335146464}
   m_Layer: 0
-  m_Name: '[MapData]'
+  m_Name: '[Navigation]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -291,12 +291,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 335146461}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd214b899ee110245abcc186d330f323, type: 3}
+  m_Script: {fileID: 11500000, guid: 00c73610cfbdb1e4dab96291453ebda0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mapCreationType: 1
-  _mapWidth: 25
-  _mapHeight: 25
+  _graphCreationType: 0
+  _width: 10
+  _height: 10
   _textureMap: {fileID: 2800000, guid: 996750778fca30b4a86bd0e08a13232a, type: 3}
   _cellSize: 2
   _openColor:
@@ -318,7 +318,7 @@ MonoBehaviour:
       serializedVersion: 2
       rgba: 4279009791
     _terrainCost: 1.5
-  _connections: 1
+  _connectionType: 0
   _graphView: {fileID: 335146464}
   _hideGraphViewOnPlay: 0
 --- !u!4 &335146463
@@ -329,7 +329,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 335146461}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -13.5, y: 0, z: -7.9}
+  m_LocalPosition: {x: -7.6, y: 0, z: -10.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -407,7 +407,7 @@ Transform:
   m_Children:
   - {fileID: 102367091}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &546751085
 GameObject:
@@ -439,7 +439,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 861182c2eda1acb44ad3f80ffde61c46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mapData: {fileID: 335146462}
+  _firstGraph: {fileID: 335146462}
+  _secondGraph: {fileID: 686579494}
   _demoUnit: {fileID: 20410554}
 --- !u!4 &546751087
 Transform:
@@ -471,10 +472,84 @@ MonoBehaviour:
   _camera: {fileID: 474006840}
   _moveSpeed: 10
   _rotateSpeed: 100
-  _zoomAmount: 5
-  _zoomSpeed: 50
+  _zoomAmount: 2.5
+  _zoomSpeed: 30
   _minZoom: 2
   _maxZoom: 30
+--- !u!1 &686579492
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 686579495}
+  - component: {fileID: 686579494}
+  - component: {fileID: 686579493}
+  m_Layer: 0
+  m_Name: '[NavArea2]'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &686579493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 686579492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14254e12497cdc8458b3a61eb12228d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _nodeViewPrefab: {fileID: 1151067951644193532, guid: fe7bb48f1e565384d8b062480fd6bebf, type: 3}
+  _showGraphPositionsOnPlay: 0
+--- !u!114 &686579494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 686579492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00c73610cfbdb1e4dab96291453ebda0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _graphCreationType: 0
+  _width: 10
+  _height: 10
+  _textureMap: {fileID: 0}
+  _cellSize: 1
+  _openColor:
+    serializedVersion: 2
+    rgba: 4286611584
+  _blockedColor:
+    serializedVersion: 2
+    rgba: 4278190080
+  _terrainData: []
+  _connectionType: 1
+  _graphView: {fileID: 686579493}
+  _hideGraphViewOnPlay: 0
+--- !u!4 &686579495
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 686579492}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 9.94, y: 0, z: 0.01}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -779,7 +854,7 @@ MonoBehaviour:
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
---- !u!1 &1777451154
+--- !u!1 &1807311180
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -787,8 +862,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1777451156}
-  - component: {fileID: 1777451155}
+  - component: {fileID: 1807311182}
+  - component: {fileID: 1807311181}
   m_Layer: 0
   m_Name: '[Pathfinder]'
   m_TagString: Untagged
@@ -796,13 +871,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1777451155
+--- !u!114 &1807311181
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1777451154}
+  m_GameObject: {fileID: 1807311180}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ecd4905af6fbb62458ea794ce4c091a6, type: 3}
@@ -815,18 +890,18 @@ MonoBehaviour:
   _allowPartialSolution: 1
   _ignoreClosed: 1
   _includeStartNodeInPath: 0
---- !u!4 &1777451156
+--- !u!4 &1807311182
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1777451154}
+  m_GameObject: {fileID: 1807311180}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.998008, y: 8.796975, z: -1.6504114}
+  m_LocalPosition: {x: -19.10569, y: 42.055504, z: -64.851616}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
