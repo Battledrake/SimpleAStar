@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(NavigationArea))]
+[CustomEditor(typeof(AStarGraphController))]
 public class MapDataEditor : Editor
 {
     SerializedProperty _graphCreationType;
