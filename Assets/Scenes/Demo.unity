@@ -349,6 +349,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _nodeViewPrefab: {fileID: 1151067951644193532, guid: fe7bb48f1e565384d8b062480fd6bebf, type: 3}
+  _showGraphPositionsOnPlay: 0
 --- !u!1 &474006839
 GameObject:
   m_ObjectHideFlags: 0
