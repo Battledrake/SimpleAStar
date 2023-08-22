@@ -6,9 +6,6 @@ public class DemoController : MonoBehaviour
     [SerializeField] private LevelGrid _levelGrid;
     [SerializeField] private DemoUnit _demoUnit;
 
-    //TODO: This will be used to stack paths for a waypoint like pathing
-    private List<GraphPosition> _pathPositions;
-
     private void Update()
     {
         if (Input.GetMouseButton(0))
