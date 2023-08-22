@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class GraphView : MonoBehaviour
 {
-    [SerializeField] private NodeView _nodeViewPrefab;
+    [SerializeField, RuntimeReadOnly] private NodeView _nodeViewPrefab;
+    [SerializeField, RuntimeReadOnly] private bool _showGraphPositionsOnPlay;
 
     private NodeView[,] _nodeViews;
     private Graph _graph;
@@ -31,6 +32,9 @@ public class GraphView : MonoBehaviour
             _nodeViews[node._graphPosition.x, node._graphPosition.z] = nodeView;
             nodeView.SetNodeViewColor(Color.grey);
         }
+
+        if (_showGraphPositionsOnPlay)
+            ShowGraphPositions();
     }
 
     public void SetNodeViewColor(GraphPosition graphPosition, Color color)
@@ -54,5 +58,21 @@ public class GraphView : MonoBehaviour
     public void ShowGraphView()
     {
         _nodeViewContainer.SetActive(true);
+    }
+
+    public void ShowGraphPositions()
+    {
+        foreach(NodeView node in _nodeViews)
+        {
+            node.ShowGraphPosition();
+        }
+    }
+
+    public void HideGraphPositions()
+    {
+        foreach (NodeView node in _nodeViews)
+        {
+            node.HideGraphPosition();
+        }
     }
 }

@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using TMPro;
+using Unity.VisualScripting;
 
 public class NodeView : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI m_gText;
-    [SerializeField] private TextMeshProUGUI m_fText;
+    [SerializeField] private GameObject _canvas;
+    [SerializeField] private TextMeshProUGUI _debugText;
 
     [SerializeField] private GameObject _tile;
-    [SerializeField] private GameObject _arrow;
     [SerializeField] private Renderer _tileRenderer;
 
     private GraphPosition _graphPosition;
@@ -27,7 +27,8 @@ public class NodeView : MonoBehaviour
             _graphPosition.z * cellSize + cellSize * 0.5f);
 
         this.transform.localScale = new Vector3(1f * cellSize, 1f, 1f * cellSize);
-        //m_gText.text = node._distanceTravelled.ToString();
+
+        _debugText.text = _graphPosition.ToString();
     }
 
     public void SetNodeViewColor(Color color)
@@ -35,9 +36,13 @@ public class NodeView : MonoBehaviour
         _tileRenderer.material.SetColor("_CellColor", color);
     }
 
-    //public void SetText()
-    //{
-    //    m_gText.text = _node._graphPosition.ToString();
-    //    m_fText.text = _node._isBlocked.ToString();
-    //}
+    public void ShowGraphPosition()
+    {
+        _canvas.SetActive(true);
+    }
+
+    public void HideGraphPosition()
+    {
+        _canvas.SetActive(false);
+    }
 }
