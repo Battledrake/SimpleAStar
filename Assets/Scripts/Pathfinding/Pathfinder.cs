@@ -97,10 +97,10 @@ public class Pathfinder : MonoBehaviour
         {
             outPath = ConvertPathToGraphPositions(bestNode);
 
-            Debug.Log($"PATHFINDER path length = {outPath.Count()}");
+            //Debug.Log($"PATHFINDER path length = {outPath.Count()}");
         }
 
-        Debug.Log("PATHFINDER SearchRoutine: elapsed time = " + (Time.realtimeSinceStartup - timeStart).ToString() + " seconds");
+        Debug.Log($"PATHFINDER SearchRoutine: elapsed time = {(Time.realtimeSinceStartup - timeStart) * 1000f}ms");
         return pathResult;
     }
 

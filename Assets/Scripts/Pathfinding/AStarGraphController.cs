@@ -40,7 +40,7 @@ public class AStarGraphController : MonoBehaviour
 
     [SerializeField, RuntimeReadOnly] private GraphConnectionType _connectionType;
     [SerializeField, RuntimeReadOnly] private GraphView _graphView;
-    [SerializeField, RuntimeReadOnly] private bool _hideGraphViewOnPlay;
+    [SerializeField, RuntimeReadOnly] private bool _showGraphViewOnPlay;
 
     public Graph GetGraph() => _graph;
 
@@ -255,7 +255,7 @@ public class AStarGraphController : MonoBehaviour
             }
         }
 
-        if (_hideGraphViewOnPlay)
+        if (!_showGraphViewOnPlay)
         {
             _graphView.HideGraphView();
         }

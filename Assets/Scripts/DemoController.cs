@@ -25,6 +25,7 @@ public class DemoController : MonoBehaviour
                     PathResult checkResult = Pathfinder.Instance.FindPath(startPosition, endPosition, _graphController.GetGraph(), out List<GraphPosition> pathPositions);
                     if (checkResult == PathResult.SearchSuccess || checkResult == PathResult.GoalUnreachable)
                     {
+
                         _demoUnit.Move(_graphController.GetWorldPositionsFromGraphPositions(pathPositions));
                     }
                 }

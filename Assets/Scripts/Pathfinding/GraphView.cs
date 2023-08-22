@@ -3,6 +3,7 @@ using UnityEngine;
 public class GraphView : MonoBehaviour
 {
     [SerializeField, RuntimeReadOnly] private NodeView _nodeViewPrefab;
+    [Tooltip("Show graph positions on each Node. GraphView must be enabled.")]
     [SerializeField, RuntimeReadOnly] private bool _showGraphPositionsOnPlay;
 
     private NodeView[,] _nodeViews;
