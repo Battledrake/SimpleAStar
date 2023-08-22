@@ -12,6 +12,7 @@ public class NodeView : MonoBehaviour
 
     [SerializeField] private GameObject _tile;
     [SerializeField] private Renderer _tileRenderer;
+    [SerializeField] private string _colorShaderProperty = "_Color";
 
     private GraphPosition _graphPosition;
 
@@ -33,7 +34,7 @@ public class NodeView : MonoBehaviour
 
     public void SetNodeViewColor(Color color)
     {
-        _tileRenderer.material.SetColor("_Color", color);
+        _tileRenderer.material.SetColor(_colorShaderProperty, color);
     }
 
     public void ShowGraphPosition()

@@ -285,6 +285,7 @@ MonoBehaviour:
   _debugText: {fileID: 2110520563288413077}
   _tile: {fileID: 1012300470581956233}
   _tileRenderer: {fileID: 8301536721178880217}
+  _colorShaderProperty: _Color
 --- !u!1 &7148857235546115134
 GameObject:
   m_ObjectHideFlags: 0
