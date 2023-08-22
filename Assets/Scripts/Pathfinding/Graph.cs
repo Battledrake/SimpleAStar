@@ -99,6 +99,15 @@ public class Graph
         }
     }
 
+    public float GetNodeTerrainCost(GraphPosition graphPosition)
+    {
+        if (IsWithinBounds(graphPosition))
+        {
+            return _nodes[graphPosition.x, graphPosition.z]._terrainCost;
+        }
+        return 0f;
+    }
+
     public void SetNodeTerrainCost(GraphPosition graphPosition, float terrainCost)
     {
         if (IsWithinBounds(graphPosition))

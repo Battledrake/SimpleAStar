@@ -96,6 +96,42 @@ public class MapData : MonoBehaviour
         return vectorList;
     }
 
+    public int GetPathLengthFromMoveLimit(List<GraphPosition> graphPositions, int moveLimit)
+    {
+        float totalTravel = 0;
+        int pathLength = 0;
+        for (int i = 0; i < graphPositions.Count; ++i)
+        {
+            float nodeCost = _graph.GetNodeTerrainCost(graphPositions[i]);
+            if (nodeCost + totalTravel <= moveLimit)
+            {
+                totalTravel += nodeCost;
+                pathLength = i;
+            }
+            else
+                break;
+        }
+        return pathLength;
+    }
+
+    public List<GraphPosition> ShrinkPathToMoveLimit(List<GraphPosition> graphPositions, int moveLimit)
+    {
+        List<GraphPosition> convertedList = new List<GraphPosition>();
+        float totalTravel = 0;
+        for (int i = 0; i < graphPositions.Count; ++i)
+        {
+            float nodeCost = _graph.GetNodeTerrainCost(graphPositions[i]);
+            if (nodeCost + totalTravel <= moveLimit)
+            {
+                totalTravel += nodeCost;
+                convertedList.Add(graphPositions[i]);
+            }
+            else
+                break;
+        }
+        return convertedList;
+    }
+
     public void SetBlockedNodeFromWorldPosition(Vector3 worldPosition)
     {
         GraphPosition graphPosition = GetGraphPositionFromWorld(worldPosition);
