@@ -276,7 +276,7 @@ GameObject:
   - component: {fileID: 335146462}
   - component: {fileID: 335146464}
   m_Layer: 0
-  m_Name: '[AStarGraph]'
+  m_Name: '[WorldGrid]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -291,33 +291,36 @@ MonoBehaviour:
   m_GameObject: {fileID: 335146461}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66c746f6ec273144f998b8581f1bc70b, type: 3}
+  m_Script: {fileID: 11500000, guid: 5bddcfc82363cfb4fa5039d9924f486b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _graphCreationType: 0
-  _width: 10
-  _height: 10
+  _width: 20
+  _height: 20
   _textureMap: {fileID: 2800000, guid: 996750778fca30b4a86bd0e08a13232a, type: 3}
   _cellSize: 1
   _openColor:
+    serializedVersion: 2
     rgba: 4284703587
   _blockedColor:
+    serializedVersion: 2
     rgba: 4278190080
   _terrainData:
   - _terrainColor:
+      serializedVersion: 2
       rgba: 4283351676
     _terrainCost: 0.5
   - _terrainColor:
+      serializedVersion: 2
       rgba: 4281663484
     _terrainCost: 1
   - _terrainColor:
+      serializedVersion: 2
       rgba: 4279009791
     _terrainCost: 1.5
   _connectionType: 1
   _graphView: {fileID: 335146464}
   _showGraphViewOnPlay: 0
-  _graphWidth: 0
-  _graphHeight: 0
 --- !u!4 &335146463
 Transform:
   m_ObjectHideFlags: 0
@@ -326,7 +329,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 335146461}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.6, y: 0, z: -10.4}
+  m_LocalPosition: {x: -7.99, y: 0, z: -11.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
