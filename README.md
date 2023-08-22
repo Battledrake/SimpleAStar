@@ -1,6 +1,6 @@
 # Pathfinding
 
-An A* Pathfinding tool for Unit.
+An A* Pathfinding tool for Unity.
 
 **_Classes Breakdown:_**<br />
 
