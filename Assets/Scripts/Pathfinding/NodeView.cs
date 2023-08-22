@@ -33,7 +33,7 @@ public class NodeView : MonoBehaviour
 
     public void SetNodeViewColor(Color color)
     {
-        _tileRenderer.material.SetColor("_CellColor", color);
+        _tileRenderer.material.SetColor("_Color", color);
     }
 
     public void ShowGraphPosition()
