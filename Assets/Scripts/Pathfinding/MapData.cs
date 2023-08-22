@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Linq;
 using System;
 using UnityEditor;
+using Unity.VisualScripting;
 
 public enum GraphConnections
 {
@@ -10,12 +11,18 @@ public enum GraphConnections
     Eight
 }
 
+[Serializable]
+public struct TerrainData
+{
+    public Color32 _terrainColor;
+    public float _terrainCost;
+}
+
 public class MapData : MonoBehaviour
 {
     private enum MapCreationType
     {
         InspectorValues,
-        TextAsset,
         TextureMap
     }
 
@@ -23,17 +30,13 @@ public class MapData : MonoBehaviour
 
     [SerializeField, HideInInspector, RuntimeReadOnly] private int _mapWidth = 10;
     [SerializeField, HideInInspector, RuntimeReadOnly] private int _mapHeight = 10;
-    [SerializeField, HideInInspector, RuntimeReadOnly] private TextAsset _textMap;
     [SerializeField, HideInInspector, RuntimeReadOnly] private Texture2D _textureMap;
-
-    [SerializeField, HideInInspector, RuntimeReadOnly] private Color32 _lightTerrainColor = new Color32(124, 194, 78, 255);
-    [SerializeField, HideInInspector, RuntimeReadOnly] private Color32 _mediumTerrainColor = new Color32(252, 255, 52, 255);
-    [SerializeField, HideInInspector, RuntimeReadOnly] private Color32 _heavyTerrainColor = new Color32(255, 129, 12, 255);
 
     [SerializeField, RuntimeReadOnly] private int _cellSize = 1;
 
     [SerializeField, RuntimeReadOnly] private Color32 _openColor = Color.grey;
     [SerializeField, RuntimeReadOnly] private Color32 _blockedColor = Color.black;
+    [SerializeField] private List<TerrainData> _terrainData = new List<TerrainData>();
 
     [SerializeField, RuntimeReadOnly] private GraphConnections _connections;
     [SerializeField, RuntimeReadOnly] private GraphView _graphView;
@@ -41,16 +44,12 @@ public class MapData : MonoBehaviour
 
     public Graph GetGraph() => _graph;
 
-    private static Dictionary<Color32, int> _terrainLookupTable = new Dictionary<Color32, int>();
-
     private int _graphWidth;
     private int _graphHeight;
     private Graph _graph;
 
     private void Awake()
     {
-        SetupLookupTable();
-
         CreateGraph();
     }
 
@@ -97,7 +96,27 @@ public class MapData : MonoBehaviour
         return vectorList;
     }
 
-    public void SetGraphPositionBlocked(GraphPosition graphPosition)
+    public void SetBlockedNodeFromWorldPosition(Vector3 worldPosition)
+    {
+        GraphPosition graphPosition = GetGraphPositionFromWorld(worldPosition);
+        if (_graph.IsWithinBounds(graphPosition))
+        {
+            _graph.SetNodeBlockedState(graphPosition, true);
+            _graphView.SetNodeViewColor(graphPosition, _blockedColor);
+        }
+    }
+
+    public void SetUnblockedNodeFromWorldPosition(Vector3 worldPosition)
+    {
+        GraphPosition graphPosition = GetGraphPositionFromWorld(worldPosition);
+        if (_graph.IsWithinBounds(graphPosition))
+        {
+            _graph.SetNodeBlockedState(graphPosition, false);
+            _graphView.SetNodeViewColor(graphPosition, _openColor);
+        }
+    }
+
+    public void SetBlockedNodeFromGraphPosition(GraphPosition graphPosition)
     {
         if (_graph.IsWithinBounds(graphPosition))
         {
@@ -106,7 +125,7 @@ public class MapData : MonoBehaviour
         }
     }
 
-    public void SetGraphPositionUnblocked(GraphPosition graphPosition)
+    public void SetUnblockedNodeFromGraphPosition(GraphPosition graphPosition)
     {
         if (_graph.IsWithinBounds(graphPosition))
         {
@@ -115,71 +134,32 @@ public class MapData : MonoBehaviour
         }
     }
 
-    private void SetupLookupTable()
+    public bool IsValidTerrainColor(Color color)
     {
-        _terrainLookupTable.Add(_openColor, 0);
-        _terrainLookupTable.Add(_blockedColor, 1);
-        _terrainLookupTable.Add(_lightTerrainColor, 2);
-        _terrainLookupTable.Add(_mediumTerrainColor, 3);
-        _terrainLookupTable.Add(_heavyTerrainColor, 4);
+        return !_terrainData.FirstOrDefault(x => x._terrainColor == color).IsUnityNull();
     }
 
-    public static Color GetColorFromTerrainCost(int terrainCost)
+    public bool IsValidTerrainCost(int terrainCost)
     {
-        if (_terrainLookupTable.ContainsValue(terrainCost))
-        {
-            Color colorKey = _terrainLookupTable.FirstOrDefault(x => x.Value == terrainCost).Key;
-            return colorKey;
-        }
-        return Color.white;
+        return !_terrainData.FirstOrDefault(x => x._terrainCost == terrainCost).IsUnityNull();
     }
 
-    public List<string> GetMapFromTextFile(TextAsset textAsset)
+    public float GetTerrainCostFromColor(Color color)
     {
-        List<string> lines = new List<string>();
-
-        if (textAsset != null)
+        if (IsValidTerrainColor(color))
         {
-            string textData = textAsset.text;
-            string[] delimiters = { "\r\n", "\n" };
-            lines.AddRange(textData.Split(delimiters, System.StringSplitOptions.None));
-            lines.Reverse();
+            return _terrainData.FirstOrDefault(x => x._terrainColor == color)._terrainCost;
         }
-        else
-        {
-            Debug.LogError("MAPDATA GetTextFromFile Error: Invalid TextAsset");
-        }
-
-        return lines;
+        return 0;
     }
 
-    public List<string> GetMapFromTexture(Texture2D texture)
+    public Color GetColorFromTerrainCost(int terrainCost)
     {
-        List<string> lines = new List<string>();
-
-        if (texture == null) return lines;
-
-        for (int y = 0; y < texture.height; y++)
+        if (IsValidTerrainCost(terrainCost))
         {
-            string newLine = "";
-
-            for (int x = 0; x < texture.width; x++)
-            {
-                Color pixelColor = texture.GetPixel(x, y);
-                if (_terrainLookupTable.ContainsKey(pixelColor))
-                {
-                    int terrainCost = _terrainLookupTable[pixelColor];
-                    newLine += terrainCost;
-                }
-                else
-                {
-                    newLine += '0';
-                }
-            }
-            lines.Add(newLine);
+            return _terrainData.FirstOrDefault(x => x._terrainCost == terrainCost)._terrainColor;
         }
-
-        return lines;
+        return _openColor;
     }
 
     public void SetDimensions(List<string> textLines)
@@ -204,11 +184,9 @@ public class MapData : MonoBehaviour
                 _graphWidth = _mapWidth;
                 _graphHeight = _mapHeight;
                 break;
-            case MapCreationType.TextAsset:
-                lines = GetMapFromTextFile(_textMap);
-                break;
             case MapCreationType.TextureMap:
-                lines = GetMapFromTexture(_textureMap);
+                _graphWidth = _textureMap.width;
+                _graphHeight = _textureMap.height;
                 break;
         }
         if (lines.Count > 0)
@@ -221,18 +199,23 @@ public class MapData : MonoBehaviour
         {
             for (int x = 0; x < _graphWidth; x++)
             {
-                if (lines.Count > 0)
+                GraphPosition nodePosition = new GraphPosition(x, z);
+                if (_mapCreationType == MapCreationType.TextureMap)
                 {
-                    int lineValue = (int)Char.GetNumericValue(lines[z][x]);
-
-                    if (lineValue == 1)
-                    {
-                        _graph.SetNodeBlockedState(new GraphPosition(x, z), true);
-                        _graphView.SetNodeViewColor(new GraphPosition(x, z), _blockedColor);
-                    }
+                    Color nodeColor = _textureMap.GetPixel(x, z);
+                    float terrainCost = GetTerrainCostFromColor(nodeColor);
+                    if (terrainCost == 0)
+                        nodeColor = _openColor;
+                    bool nodeBlocked = nodeColor == _blockedColor ? true : false;
+                    _graph.SetNodeBlockedState(nodePosition, nodeBlocked);
+                    _graph.SetNodeTerrainCost(nodePosition, terrainCost);
+                    _graphView.SetNodeViewColor(nodePosition, nodeColor);
                 }
-                _graph.SetNodeBlockedState(new GraphPosition(x, z), false);
-                _graphView.SetNodeViewColor(new GraphPosition(x, z), _openColor);
+                else
+                {
+                    _graph.SetNodeBlockedState(nodePosition, false);
+                    _graphView.SetNodeViewColor(nodePosition, _openColor);
+                }
             }
         }
 

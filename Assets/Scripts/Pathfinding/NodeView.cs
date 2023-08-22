@@ -20,12 +20,11 @@ public class NodeView : MonoBehaviour
         _graphPosition = graphPosition;
 
         this.transform.name = $"Node({_graphPosition})";
+
         this.transform.localPosition = new Vector3(
             _graphPosition.x * cellSize + cellSize * 0.5f,
             this.transform.position.y,
             _graphPosition.z * cellSize + cellSize * 0.5f);
-
-        Debug.Log(this.transform.localPosition);
 
         this.transform.localScale = new Vector3(1f * cellSize, 1f, 1f * cellSize);
         //m_gText.text = node._distanceTravelled.ToString();

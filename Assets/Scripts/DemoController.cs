@@ -34,8 +34,7 @@ public class DemoController : MonoBehaviour
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out RaycastHit hitResult))
                 {
-                    GraphPosition hitPosition = _mapData.GetGraphPositionFromWorld(hitResult.point);
-                    SetGraphPositionIsBlocked(hitPosition, false);
+                    SetBlockedStateFromWorldPosition(hitResult.point, false);
                 }
             }
         }
@@ -44,17 +43,16 @@ public class DemoController : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hitResult))
             {
-                GraphPosition hitPosition = _mapData.GetGraphPositionFromWorld(hitResult.point);
-                SetGraphPositionIsBlocked(hitPosition, true);
+                SetBlockedStateFromWorldPosition(hitResult.point, true);
             }
         }
     }
 
-    private void SetGraphPositionIsBlocked(GraphPosition graphPosition, bool isBlocked)
+    private void SetBlockedStateFromWorldPosition(Vector3 worldPosition, bool isBlocked)
     {
         if (isBlocked)
-            _mapData.SetGraphPositionBlocked(graphPosition);
+            _mapData.SetBlockedNodeFromWorldPosition(worldPosition);
         else
-            _mapData.SetGraphPositionUnblocked(graphPosition);
+            _mapData.SetUnblockedNodeFromWorldPosition(worldPosition);
     }
 }

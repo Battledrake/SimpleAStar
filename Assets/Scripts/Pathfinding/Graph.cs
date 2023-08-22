@@ -99,6 +99,14 @@ public class Graph
         }
     }
 
+    public void SetNodeTerrainCost(GraphPosition graphPosition, float terrainCost)
+    {
+        if (IsWithinBounds(graphPosition))
+        {
+            _nodes[graphPosition.x, graphPosition.z]._terrainCost = terrainCost;
+        }
+    }
+
     public bool IsWithinBounds(GraphPosition graphPosition)
     {
         return (graphPosition.x >= 0 && graphPosition.x < _width && graphPosition.z >= 0 && graphPosition.z < _height);

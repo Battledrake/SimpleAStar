@@ -6,7 +6,7 @@ public class Node : IComparable<Node>
 {
     public GraphPosition _graphPosition;
 
-    public int _terrainCost = 0;
+    public float _terrainCost = 0;
 
     public float _traversalCost = Mathf.Infinity;
     public float _totalCost = Mathf.Infinity;
@@ -20,7 +20,7 @@ public class Node : IComparable<Node>
 
     public bool _isBlocked = false;
 
-    public Node(GraphPosition graphPosition, int terrainCost, bool isBlocked)
+    public Node(GraphPosition graphPosition, float terrainCost, bool isBlocked)
     {
         _graphPosition = graphPosition;
         _terrainCost = terrainCost;
