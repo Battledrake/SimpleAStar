@@ -9,7 +9,6 @@ public class Graph
     public int Height => _height;
 
     private Node[,] _nodes;
-    private int[,] _mapData;
     private int _width;
     private int _height;
 
@@ -33,7 +32,7 @@ public class Graph
         new Vector2Int(-1, 1)
     };
 
-    public Graph(GraphConnections connections, int width, int height, int cellSize)
+    public Graph(GraphConnections connections, int width, int height)
     {
         _connections = connections;
         _width = width;

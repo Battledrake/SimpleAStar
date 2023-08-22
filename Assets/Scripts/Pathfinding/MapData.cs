@@ -105,7 +105,7 @@ public class MapData : MonoBehaviour
             float nodeCost = _graph.GetNodeTerrainCost(graphPositions[i]);
             if (nodeCost + totalTravel <= moveLimit)
             {
-                totalTravel += nodeCost;
+                totalTravel += nodeCost + 1;
                 pathLength = i;
             }
             else
@@ -123,7 +123,7 @@ public class MapData : MonoBehaviour
             float nodeCost = _graph.GetNodeTerrainCost(graphPositions[i]);
             if (nodeCost + totalTravel <= moveLimit)
             {
-                totalTravel += nodeCost;
+                totalTravel += nodeCost + 1;
                 convertedList.Add(graphPositions[i]);
             }
             else
@@ -228,7 +228,7 @@ public class MapData : MonoBehaviour
         if (lines.Count > 0)
             SetDimensions(lines);
 
-        _graph = new Graph(_connections, _graphWidth, _graphHeight, _cellSize);
+        _graph = new Graph(_connections, _graphWidth, _graphHeight);
         _graphView.Init(_graph, _cellSize);
 
         for (int z = 0; z < _graphHeight; z++)
