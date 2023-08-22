@@ -57,12 +57,15 @@ public class Pathfinder : MonoBehaviour
         Instance = this;
     }
 
-    public PathResult FindPath(GraphPosition startPosition, GraphPosition endPosition, Graph graph, out List<GraphPosition> outPath)
+    public PathResult FindPath(Vector3 startPosition, Vector3 endPosition, LevelGrid graphManager, out List<Vector3> outPath)
     {
-        Node startNode = graph.GetNodeFromGraphPosition(startPosition);
-        Node goalNode = graph.GetNodeFromGraphPosition(endPosition);
+        Graph graph = graphManager.GetGraph();
+        GraphPosition startGraphPos = graphManager.GetGraphPositionFromWorld(startPosition);
+        GraphPosition endGraphPos = graphManager.GetGraphPositionFromWorld(endPosition);
+        Node startNode = graph.GetNodeFromGraphPosition(startGraphPos);
+        Node goalNode = graph.GetNodeFromGraphPosition(endGraphPos);
 
-        outPath = new List<GraphPosition>();
+        outPath = new List<Vector3>();
 
         if (startNode == null || goalNode == null)
             return PathResult.SearchFail;
@@ -95,7 +98,8 @@ public class Pathfinder : MonoBehaviour
 
         if (pathResult == PathResult.SearchSuccess || _allowPartialSolution)
         {
-            outPath = ConvertPathToGraphPositions(bestNode);
+            List<GraphPosition> graphList = ConvertPathToGraphPositions(bestNode);
+            outPath = graphManager.GetWorldPositionsFromGraphPositions(graphList);
 
             //Debug.Log($"PATHFINDER path length = {outPath.Count()}");
         }

@@ -320,7 +320,7 @@ MonoBehaviour:
     _terrainCost: 1.5
   _connectionType: 1
   _graphView: {fileID: 335146464}
-  _showGraphViewOnPlay: 0
+  _showGraphViewOnPlay: 1
 --- !u!4 &335146463
 Transform:
   m_ObjectHideFlags: 0
@@ -439,7 +439,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 861182c2eda1acb44ad3f80ffde61c46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _graphManager: {fileID: 0}
+  _graphManager: {fileID: 335146462}
   _demoUnit: {fileID: 20410554}
 --- !u!4 &546751087
 Transform:

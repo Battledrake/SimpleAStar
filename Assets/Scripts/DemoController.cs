@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class DemoController : MonoBehaviour
 {
-    [SerializeField] private GraphManager _graphManager;
+    [SerializeField] private LevelGrid _levelGrid;
     [SerializeField] private DemoUnit _demoUnit;
 
     //TODO: This will be used to stack paths for a waypoint like pathing
@@ -20,13 +20,13 @@ public class DemoController : MonoBehaviour
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out RaycastHit hitResult))
                 {
-                    GraphPosition startPosition = _graphManager.GetGraphPositionFromWorld(_demoUnit.transform.position);
-                    GraphPosition endPosition = _graphManager.GetGraphPositionFromWorld(hitResult.point);
-                    PathResult checkResult = Pathfinder.Instance.FindPath(startPosition, endPosition, _graphManager.GetGraph(), out List<GraphPosition> pathPositions);
+                    Vector3 startPosition = _demoUnit.transform.position;
+                    Vector3 endPosition = hitResult.point;
+                    PathResult checkResult = Pathfinder.Instance.FindPath(startPosition, endPosition, _levelGrid, out List<Vector3> pathPositions);
                     if (checkResult == PathResult.SearchSuccess || checkResult == PathResult.GoalUnreachable)
                     {
 
-                        _demoUnit.Move(_graphManager.GetWorldPositionsFromGraphPositions(pathPositions));
+                        _demoUnit.Move(pathPositions);
                     }
                 }
             }
@@ -52,8 +52,8 @@ public class DemoController : MonoBehaviour
     private void SetBlockedStateFromWorldPosition(Vector3 worldPosition, bool isBlocked)
     {
         if (isBlocked)
-            _graphManager.SetBlockedNodeFromWorldPosition(worldPosition);
+            _levelGrid.SetBlockedNodeFromWorldPosition(worldPosition);
         else
-            _graphManager.SetUnblockedNodeFromWorldPosition(worldPosition);
+            _levelGrid.SetUnblockedNodeFromWorldPosition(worldPosition);
     }
 }

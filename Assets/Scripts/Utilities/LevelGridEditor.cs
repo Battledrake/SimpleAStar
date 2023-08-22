@@ -1,8 +1,8 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(GraphManager))]
-public class GraphManagerEditor : Editor
+[CustomEditor(typeof(LevelGrid))]
+public class LevelGridEditor : Editor
 {
     SerializedProperty _graphCreationType;
     SerializedProperty _width;

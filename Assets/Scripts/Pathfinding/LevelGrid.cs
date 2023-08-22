@@ -18,7 +18,7 @@ public struct TerrainData
     public float _terrainCost;
 }
 
-public class GraphManager : MonoBehaviour
+public class LevelGrid : MonoBehaviour
 {
     private enum GraphCreationType
     {
@@ -96,13 +96,14 @@ public class GraphManager : MonoBehaviour
         return vectorList;
     }
 
-    public int GetPathLengthFromMoveLimit(List<GraphPosition> graphPositions, int moveLimit)
+    public int GetPathLengthFromMoveLimit(List<Vector3> positions, int moveLimit)
     {
         float totalTravel = 0;
         int pathLength = 0;
-        for (int i = 0; i < graphPositions.Count; ++i)
+        for (int i = 0; i < positions.Count; ++i)
         {
-            float nodeCost = _graph.GetNodeTerrainCost(graphPositions[i]);
+            GraphPosition graphPosition = GetGraphPositionFromWorld(positions[i]);
+            float nodeCost = _graph.GetNodeTerrainCost(graphPosition);
             if (nodeCost + totalTravel <= moveLimit)
             {
                 totalTravel += nodeCost + 1;
@@ -112,24 +113,6 @@ public class GraphManager : MonoBehaviour
                 break;
         }
         return pathLength;
-    }
-
-    public List<GraphPosition> ShrinkPathToMoveLimit(List<GraphPosition> graphPositions, int moveLimit)
-    {
-        List<GraphPosition> convertedList = new List<GraphPosition>();
-        float totalTravel = 0;
-        for (int i = 0; i < graphPositions.Count; ++i)
-        {
-            float nodeCost = _graph.GetNodeTerrainCost(graphPositions[i]);
-            if (nodeCost + totalTravel <= moveLimit)
-            {
-                totalTravel += nodeCost + i + 1;
-                convertedList.Add(graphPositions[i]);
-            }
-            else
-                break;
-        }
-        return convertedList;
     }
 
     public void SetBlockedNodeFromWorldPosition(Vector3 worldPosition)
