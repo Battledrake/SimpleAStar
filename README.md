@@ -2,18 +2,19 @@
 
 An A* Pathfinding tool for Unit.
 
-Breakdown:
-GraphPosition - struct for storing x/z values for node position in the graph. Every node has one, and helper functions are used to locate nodes based on these or convert from graph to world and vice versa.
-Node - base class of nodes in graph. No need to modify or do anything with.
-Graph - holds all the nodes in a 2D array and has functions to handle them. Non-monobehavior and created/managed by LevelGrid class.
-LevelGrid - class responsible for inspector interaction, creating the graph, and sending/receiving data to the graph. Multiple LevelGrid's can be made to have multiple graph's in a scene of varying sizes/layouts.
-Pathfinder - Singleton responsible for finding paths on a graph. FindPath is done with a start position, end position, a LevelGrid, and an out List of Vector3s.
-GraphView - responsible for holding a grid of nodeviews and managing their display. Currently handled by the LevelGrid.
-NodeView - visual for a graph's node. Display a tile, sized to cellsize at a nodes position, and optional a text with the graph position for debugging.
-StaticFormulas - Utility class to access heuristic/traversal formulas for pathfinding.
-DemoController - Used as a demo of what is needed to do a pathfind. Reference to a LevelGrid, a unit or units to respond to the path, start and end positions, and a list of Vector3's to pass to Unit to traverse. Also showcases setting blocked/unblocked nodes.
-DemoUnit - basic unit that receives a List<Vector3> in a Move function and travels the path. 
-DemoCameraController - basic cinemachine camera controller. WASD for movement. QE for rotation. Scroll wheel for zoom.
+**_Classes Breakdown:_**<br />
+
+**GraphPosition** - struct for storing x/z values for node position in the graph. Every node has one, and helper functions are used to locate nodes based on these or convert from graph to world and vice versa.<br />
+**Node** - base class of nodes in graph. No need to modify or do anything with.<br />
+**Graph** - holds all the nodes in a 2D array and has functions to handle them. Non-monobehavior and created/managed by LevelGrid class.<br />
+**LevelGrid** - class responsible for inspector interaction, creating the graph, and sending/receiving data to the graph. Multiple LevelGrid's can be made to have multiple graph's in a scene of varying sizes/layouts.<br />
+**Pathfinder** - Singleton responsible for finding paths on a graph. FindPath is done with a start position, end position, a LevelGrid, and an out List of Vector3s.<br />
+**GraphView** - responsible for holding a grid of nodeviews and managing their display. Currently handled by the LevelGrid.<br />
+**NodeView** - visual for a graph's node. Display a tile, sized to cellsize at a nodes position, and optional a text with the graph position for debugging.<br />
+**StaticFormulas** - Utility class to access heuristic/traversal formulas for pathfinding.<br />
+**DemoController** - Used as a demo of what is needed to do a pathfind. Reference to a LevelGrid, a unit or units to respond to the path, start and end positions, and a list of Vector3's to pass to Unit to traverse. Also showcases setting blocked/unblocked nodes.<br />
+**DemoUnit** - basic unit that receives a List<Vector3> in a Move function and travels the path.<br /> 
+**DemoCameraController** - basic cinemachine camera controller. WASD for movement. QE for rotation. Scroll wheel for zoom.<br />
 
 The purpose of this tool is to be a simple but easily extensible tool to make grid based movement games. The tool should be able to drag and drop into any game, while giving simple to use customization options to get the right pathfinding feel for the various needs.
 
