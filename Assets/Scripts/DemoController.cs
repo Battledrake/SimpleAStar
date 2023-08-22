@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class DemoController : MonoBehaviour
 {
-    [SerializeField] private AStarGraphController _graphController;
+    [SerializeField] private GraphManager _graphManager;
     [SerializeField] private DemoUnit _demoUnit;
 
     //TODO: This will be used to stack paths for a waypoint like pathing
@@ -20,13 +20,13 @@ public class DemoController : MonoBehaviour
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out RaycastHit hitResult))
                 {
-                    GraphPosition startPosition = _graphController.GetGraphPositionFromWorld(_demoUnit.transform.position);
-                    GraphPosition endPosition = _graphController.GetGraphPositionFromWorld(hitResult.point);
-                    PathResult checkResult = Pathfinder.Instance.FindPath(startPosition, endPosition, _graphController.GetGraph(), out List<GraphPosition> pathPositions);
+                    GraphPosition startPosition = _graphManager.GetGraphPositionFromWorld(_demoUnit.transform.position);
+                    GraphPosition endPosition = _graphManager.GetGraphPositionFromWorld(hitResult.point);
+                    PathResult checkResult = Pathfinder.Instance.FindPath(startPosition, endPosition, _graphManager.GetGraph(), out List<GraphPosition> pathPositions);
                     if (checkResult == PathResult.SearchSuccess || checkResult == PathResult.GoalUnreachable)
                     {
 
-                        _demoUnit.Move(_graphController.GetWorldPositionsFromGraphPositions(pathPositions));
+                        _demoUnit.Move(_graphManager.GetWorldPositionsFromGraphPositions(pathPositions));
                     }
                 }
             }
@@ -52,8 +52,8 @@ public class DemoController : MonoBehaviour
     private void SetBlockedStateFromWorldPosition(Vector3 worldPosition, bool isBlocked)
     {
         if (isBlocked)
-            _graphController.SetBlockedNodeFromWorldPosition(worldPosition);
+            _graphManager.SetBlockedNodeFromWorldPosition(worldPosition);
         else
-            _graphController.SetUnblockedNodeFromWorldPosition(worldPosition);
+            _graphManager.SetUnblockedNodeFromWorldPosition(worldPosition);
     }
 }

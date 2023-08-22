@@ -9,7 +9,7 @@ public class DemoUnit : MonoBehaviour
     [SerializeField] private float _stoppingDistance = 0.1f;
     [Tooltip("Toggle for showing debug path")]
     [SerializeField] private bool _drawDebugPath;
-    [Tooltip("How many spaces should this unit be allowed to move. Only used for debug drawlines and no terraincost graphs currently")]
+    [Tooltip("How many spaces should this unit be allowed to move.")]
     [SerializeField] private int _moveAllowance;
 
     private List<Vector3> _pathPositions;
@@ -46,6 +46,7 @@ public class DemoUnit : MonoBehaviour
         }
     }
 
+    //Currently doesn't consider terrain cost.
     private void DrawDebugPath()
     {
         for (int i = _pathPositions.Count - 1; i >= _currentPositionIndex; i--)

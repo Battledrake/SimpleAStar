@@ -1,8 +1,8 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(AStarGraphController))]
-public class MapDataEditor : Editor
+[CustomEditor(typeof(GraphManager))]
+public class GraphManagerEditor : Editor
 {
     SerializedProperty _graphCreationType;
     SerializedProperty _width;

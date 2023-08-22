@@ -18,7 +18,7 @@ public struct TerrainData
     public float _terrainCost;
 }
 
-public class AStarGraphController : MonoBehaviour
+public class GraphManager : MonoBehaviour
 {
     private enum GraphCreationType
     {
