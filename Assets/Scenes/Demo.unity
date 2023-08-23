@@ -294,7 +294,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 501958e9b95c7d94da5786dd54d9bcb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _graphCreationType: 0
+  _graphCreationType: 2
   _width: 10
   _height: 10
   _textureMap: {fileID: 2800000, guid: 996750778fca30b4a86bd0e08a13232a, type: 3}

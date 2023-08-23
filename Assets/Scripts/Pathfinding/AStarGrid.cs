@@ -3,8 +3,6 @@ using UnityEngine;
 using System.Linq;
 using System;
 using UnityEditor;
-using Unity.VisualScripting;
-using UnityEditor.MemoryProfiler;
 
 public enum GraphConnectionType
 {
@@ -219,12 +217,12 @@ public class AStarGrid : MonoBehaviour
 
     public bool IsValidTerrainColor(Color color)
     {
-        return !_terrainData.FirstOrDefault(x => x._terrainColor == color).IsUnityNull();
+        return !_terrainData.FirstOrDefault(x => x._terrainColor == color).Equals(null);
     }
 
     public bool IsValidTerrainCost(int terrainCost)
     {
-        return !_terrainData.FirstOrDefault(x => x._terrainCost == terrainCost).IsUnityNull();
+        return !_terrainData.FirstOrDefault(x => x._terrainCost == terrainCost).Equals(null);
     }
 
     public float GetTerrainCostFromColor(Color color)
