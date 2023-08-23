@@ -23,7 +23,7 @@ Only supports 2D square-grid based pathfinding with hex to come later when there
 
 Code was designed for ease of use, extensibility, and adaptability. Classes are kept minimalistic, following good Design Patterns.
 
-Pathfinding is done by creating a graph with a width and height and cellsize. Afterwords, a path can be found by calling into the Pathfinder Instance's FindPath method and passing in a start position, end position, the AStarGrid to find the path for, and an out list of Vector3's of the path that will be created.
+Pathfinding is done by creating an AStarGrid with a width, height, cellsize, and connection type. Afterwords, a path can be found by calling into the Pathfinder Instance's FindPath method and passing in a start position, end position, the AStarGrid to find the path for, and an out list of Vector3's of the path that will be created.
 
 The pathfinder will return a result on whether it failed, succeeded, or if the goal was unreachable. Failed means the start/end positions retrieved invalid nodes (meaning not on the graph). Unreachable goals can still be returned with _allowPartialSolution, giving a path to the closest reachable position.
 
