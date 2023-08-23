@@ -1,14 +1,15 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Graph
+public class Graph<T> where T : Node<T>
 {
     private GraphConnectionType _connections;
-    public Node[,] Nodes => _nodes;
+    public T[,] Nodes => _nodes;
     public int Width => _width;
     public int Height => _height;
 
-    private Node[,] _nodes;
+    private T[,] _nodes;
     private int _width;
     private int _height;
 
@@ -38,13 +39,13 @@ public class Graph
         _width = width;
         _height = height;
 
-        _nodes = new Node[_width, _height];
+        _nodes = new T[_width, _height];
         for (int z = 0; z < _height; z++)
         {
             for (int x = 0; x < _width; x++)
             {
                 GraphPosition graphPosition = new GraphPosition(x, z);
-                Node newNode = new Node(graphPosition, 0, false);
+                T newNode = (T)Activator.CreateInstance(typeof(T), graphPosition);
                 _nodes[x, z] = newNode;
             }
         }
@@ -70,49 +71,13 @@ public class Graph
         }
     }
 
-    public Node GetNodeFromGraphPosition(GraphPosition graphPosition)
+    public T GetNodeFromGraphPosition(GraphPosition graphPosition)
     {
         if (IsWithinBounds(graphPosition))
         {
             return _nodes[graphPosition.x, graphPosition.z];
         }
         return null;
-    }
-
-    public void SetNodeBlockedState(GraphPosition graphPosition, bool isBlocked)
-    {
-        if (IsWithinBounds(graphPosition))
-        {
-            Node node = GetNodeFromGraphPosition(graphPosition);
-            node._isBlocked = isBlocked;
-
-            for (int i = 0; i < node._neighbors.Count; i++)
-            {
-                node._neighbors[i]._neighbors = GetNeighbors(node._neighbors[i]._graphPosition);
-            }
-
-            if (node._isBlocked)
-                node._neighbors.Clear();
-            else
-                node._neighbors = GetNeighbors(node._graphPosition);
-        }
-    }
-
-    public float GetNodeTerrainCost(GraphPosition graphPosition)
-    {
-        if (IsWithinBounds(graphPosition))
-        {
-            return _nodes[graphPosition.x, graphPosition.z]._terrainCost;
-        }
-        return 0f;
-    }
-
-    public void SetNodeTerrainCost(GraphPosition graphPosition, float terrainCost)
-    {
-        if (IsWithinBounds(graphPosition))
-        {
-            _nodes[graphPosition.x, graphPosition.z]._terrainCost = terrainCost;
-        }
     }
 
     public bool IsWithinBounds(GraphPosition graphPosition)
@@ -129,10 +94,10 @@ public class Graph
         return false;
     }
 
-    public List<Node> GetNeighbors(GraphPosition graphPosition)
+    public List<T> GetNeighbors(GraphPosition graphPosition)
     {
         Vector2Int[] directions = GetDirectionsByType(_connections);
-        List<Node> neighborNodes = new List<Node>();
+        List<T> neighborNodes = new List<T>();
 
         foreach (Vector2Int direction in directions)
         {

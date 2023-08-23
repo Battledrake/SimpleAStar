@@ -276,7 +276,7 @@ GameObject:
   - component: {fileID: 335146462}
   - component: {fileID: 335146464}
   m_Layer: 0
-  m_Name: '[LevelGrid]'
+  m_Name: '[AStarGrid]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -439,7 +439,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 861182c2eda1acb44ad3f80ffde61c46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _levelGrid: {fileID: 335146462}
+  _pathingGrid: {fileID: 335146462}
   _demoUnit: {fileID: 20410554}
 --- !u!4 &546751087
 Transform:

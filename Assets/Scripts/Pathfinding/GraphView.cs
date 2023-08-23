@@ -7,10 +7,10 @@ public class GraphView : MonoBehaviour
     [SerializeField, RuntimeReadOnly] private bool _showGraphPositionsOnPlay;
 
     private NodeView[,] _nodeViews;
-    private Graph _graph;
+    private Graph<PathNode> _graph;
     private GameObject _nodeViewContainer;
 
-    public void Init(Graph graph, int cellSize)
+    public void Init(Graph<PathNode> graph, int cellSize)
     {
         if (graph == null)
         {
@@ -25,7 +25,7 @@ public class GraphView : MonoBehaviour
         _nodeViewContainer.transform.parent = this.transform;
         _nodeViewContainer.transform.localPosition = new Vector3(0f, 0.01f, 0f);
 
-        foreach (Node node in _graph.Nodes)
+        foreach (PathNode node in _graph.Nodes)
         {
             NodeView nodeView = Instantiate<NodeView>(_nodeViewPrefab, _nodeViewContainer.transform);
 

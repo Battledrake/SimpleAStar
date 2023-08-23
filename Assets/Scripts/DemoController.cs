@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class DemoController : MonoBehaviour
 {
-    [SerializeField] private LevelGrid _levelGrid;
+    [SerializeField] private AStarGrid _pathingGrid;
     [SerializeField] private DemoUnit _demoUnit;
 
     private void Update()
@@ -19,7 +19,7 @@ public class DemoController : MonoBehaviour
                 {
                     Vector3 startPosition = _demoUnit.transform.position;
                     Vector3 endPosition = hitResult.point;
-                    PathResult checkResult = Pathfinder.Instance.FindPath(startPosition, endPosition, _levelGrid, out List<Vector3> pathPositions);
+                    PathResult checkResult = Pathfinder.Instance.FindPath(startPosition, endPosition, _pathingGrid, out List<Vector3> pathPositions);
                     if (checkResult == PathResult.SearchSuccess || checkResult == PathResult.GoalUnreachable)
                     {
 
@@ -32,7 +32,7 @@ public class DemoController : MonoBehaviour
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out RaycastHit hitResult))
                 {
-                    SetBlockedStateFromWorldPosition(hitResult.point, false);
+                    _pathingGrid.SetNodeIsBlocked(hitResult.point, false);
                 }
             }
         }
@@ -41,16 +41,8 @@ public class DemoController : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hitResult))
             {
-                SetBlockedStateFromWorldPosition(hitResult.point, true);
+                _pathingGrid.SetNodeIsBlocked(hitResult.point, true);
             }
         }
-    }
-
-    private void SetBlockedStateFromWorldPosition(Vector3 worldPosition, bool isBlocked)
-    {
-        if (isBlocked)
-            _levelGrid.SetBlockedNodeFromWorldPosition(worldPosition);
-        else
-            _levelGrid.SetUnblockedNodeFromWorldPosition(worldPosition);
     }
 }

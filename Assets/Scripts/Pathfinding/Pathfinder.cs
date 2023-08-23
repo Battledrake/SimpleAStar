@@ -44,7 +44,7 @@ public class Pathfinder : MonoBehaviour
     [Tooltip("Should we include the start node in the end result path?")]
     [SerializeField] private bool _includeStartNodeInPath;
 
-    private PriorityQueue<Node> _frontierNodes;
+    private PriorityQueue<PathNode> _frontierNodes;
 
     private void Awake()
     {
@@ -57,13 +57,13 @@ public class Pathfinder : MonoBehaviour
         Instance = this;
     }
 
-    public PathResult FindPath(Vector3 startPosition, Vector3 endPosition, LevelGrid graphManager, out List<Vector3> outPath)
+    public PathResult FindPath(Vector3 startPosition, Vector3 endPosition, AStarGrid aStarGrid, out List<Vector3> outPath)
     {
-        Graph graph = graphManager.GetGraph();
-        GraphPosition startGraphPos = graphManager.GetGraphPositionFromWorld(startPosition);
-        GraphPosition endGraphPos = graphManager.GetGraphPositionFromWorld(endPosition);
-        Node startNode = graph.GetNodeFromGraphPosition(startGraphPos);
-        Node goalNode = graph.GetNodeFromGraphPosition(endGraphPos);
+        Graph<PathNode> graph = aStarGrid.GetGraph();
+        GraphPosition startGraphPos = aStarGrid.GetGraphPositionFromWorld(startPosition);
+        GraphPosition endGraphPos = aStarGrid.GetGraphPositionFromWorld(endPosition);
+        PathNode startNode = graph.GetNodeFromGraphPosition(startGraphPos);
+        PathNode goalNode = graph.GetNodeFromGraphPosition(endGraphPos);
 
         outPath = new List<Vector3>();
 
@@ -73,7 +73,7 @@ public class Pathfinder : MonoBehaviour
             return PathResult.SearchSuccess;
 
         graph.ResetNodes();
-        _frontierNodes = new PriorityQueue<Node>();
+        _frontierNodes = new PriorityQueue<PathNode>();
 
         float timeStart = Time.realtimeSinceStartup;
 
@@ -83,7 +83,7 @@ public class Pathfinder : MonoBehaviour
         _frontierNodes.Enqueue(startNode);
         startNode._isOpened = true;
 
-        Node bestNode = startNode;
+        PathNode bestNode = startNode;
         float bestNodeCost = startNode._totalCost;
         PathResult pathResult = PathResult.SearchSuccess;
 
@@ -99,7 +99,7 @@ public class Pathfinder : MonoBehaviour
         if (pathResult == PathResult.SearchSuccess || _allowPartialSolution)
         {
             List<GraphPosition> graphList = ConvertPathToGraphPositions(bestNode);
-            outPath = graphManager.GetWorldPositionsFromGraphPositions(graphList);
+            outPath = aStarGrid.GetWorldPositionsFromGraphPositions(graphList);
 
             //Debug.Log($"PATHFINDER path length = {outPath.Count()}");
         }
@@ -108,9 +108,9 @@ public class Pathfinder : MonoBehaviour
         return pathResult;
     }
 
-    private bool ProcessSingleNode(Node goalNode, Graph graph, ref Node bestNode, ref float bestNodeCost)
+    private bool ProcessSingleNode(PathNode goalNode, Graph<PathNode> graph, ref PathNode bestNode, ref float bestNodeCost)
     {
-        Node currentNode = _frontierNodes.Dequeue();
+        PathNode currentNode = _frontierNodes.Dequeue();
         currentNode._isClosed = true;
 
         if (currentNode == goalNode)
@@ -122,7 +122,7 @@ public class Pathfinder : MonoBehaviour
 
         for (int i = 0; i < currentNode._neighbors.Count; i++)
         {
-            Node neighborNode = currentNode._neighbors[i];
+            PathNode neighborNode = currentNode._neighbors[i];
 
             if (neighborNode == currentNode._previous || !IsTraversalAllowed(currentNode, neighborNode, graph))
                 continue;
@@ -157,13 +157,13 @@ public class Pathfinder : MonoBehaviour
         return true;
     }
 
-    public List<GraphPosition> ConvertPathToGraphPositions(Node endNode)
+    public List<GraphPosition> ConvertPathToGraphPositions(PathNode endNode)
     {
         List<GraphPosition> graphPositions = new List<GraphPosition>();
 
         graphPositions.Add(endNode._graphPosition);
 
-        Node currentNode = endNode;
+        PathNode currentNode = endNode;
 
         int pathLength = graphPositions.Count;
         while(currentNode._previous != null)
@@ -181,17 +181,17 @@ public class Pathfinder : MonoBehaviour
         return graphPositions;
     }
 
-    private float GetHeuristicCost(Node source, Node target)
+    private float GetHeuristicCost(PathNode source, PathNode target)
     {
         return GetCalculationFromType(_heuristicCost, source, target);
     }
 
-    private float GetTraversalCost(Node source, Node target)
+    private float GetTraversalCost(PathNode source, PathNode target)
     {
         return GetCalculationFromType(_traversalCost, source, target) + target._terrainCost;
     }
 
-    private float GetCalculationFromType(CalculationType calculationType, Node source, Node target)
+    private float GetCalculationFromType(CalculationType calculationType, PathNode source, PathNode target)
     {
         switch (calculationType)
         {
@@ -209,7 +209,7 @@ public class Pathfinder : MonoBehaviour
         return 0f;
     }
 
-    private bool IsTraversalAllowed(Node source, Node target, Graph graph)
+    private bool IsTraversalAllowed(PathNode source, PathNode target, Graph<PathNode> graph)
     {
         if (target._isBlocked)
         {
