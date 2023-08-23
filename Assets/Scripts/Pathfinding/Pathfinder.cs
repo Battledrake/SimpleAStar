@@ -229,16 +229,16 @@ public class Pathfinder : MonoBehaviour
             PathNode adjacentNodeTwo = graph.GetNodeFromGraphPosition(new GraphPosition(srcX, srcZ + distance.z));
             if (_traversalType == TraversalType.NoSharpDiagonals)
             {
-                if ((adjacentNodeOne != null && !adjacentNodeOne._isBlocked)
-                 || adjacentNodeTwo != null && !adjacentNodeTwo._isBlocked)
+                if ((adjacentNodeOne != null && adjacentNodeOne._isBlocked)
+                 || (adjacentNodeTwo != null && adjacentNodeTwo._isBlocked))
                 {
                     return false;
                 }
             }
             else
             {
-                if ((adjacentNodeOne != null && !adjacentNodeOne._isBlocked)
-                 && (adjacentNodeTwo != null && !adjacentNodeOne._isBlocked))
+                if ((adjacentNodeOne != null && adjacentNodeOne._isBlocked)
+                 && (adjacentNodeTwo != null && adjacentNodeTwo._isBlocked))
                 {
                     return false;
                 }
