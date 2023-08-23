@@ -213,7 +213,7 @@ public class Pathfinder : MonoBehaviour
     {
         if (target._isBlocked)
         {
-            Debug.LogWarning("PATHFINDER: isBlocked was true, this shouldn't happen.");
+            Debug.LogWarning($"PATHFINDER: isBlocked was true. This shouldn't happen here as it means the blocked node was included in this {source._graphPosition} node's neighbors. Avoid including blocked nodes.");
             return false;
         }
 
