@@ -15,6 +15,7 @@ public class PathNode : Node<PathNode>, IComparable<PathNode>
     public bool _isOpened = false;
     public bool _isClosed = false;
 
+    public bool _isBlocked = false;
 
     public PathNode(GraphPosition graphPosition) : base(graphPosition) { }
 

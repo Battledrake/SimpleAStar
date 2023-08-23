@@ -4,6 +4,7 @@ using System.Linq;
 using System;
 using UnityEditor;
 using Unity.VisualScripting;
+using UnityEditor.MemoryProfiler;
 
 public enum GraphConnectionType
 {
@@ -120,9 +121,44 @@ public class AStarGrid : MonoBehaviour
     {
         GraphPosition graphPosition = GetGraphPositionFromWorld(worldPosition);
         PathNode pathNode = _graph.GetNodeFromGraphPosition(graphPosition);
-        if(pathNode != null)
+        if (pathNode != null)
         {
-            pathNode._isBlocked = true;
+            pathNode._isBlocked = isBlocked;
+            Color nodeViewColor = isBlocked ? _blockedColor : _openColor;
+            _graphView.SetNodeViewColor(graphPosition, nodeViewColor);
+            UpdateNodeNeighbors(pathNode);
+        }
+    }
+
+    public void UpdateNodeNeighbors(PathNode changedNode)
+    {
+        changedNode._neighbors.Clear();
+
+        Vector2Int[] directions = _graph.GetDirectionsByType();
+        
+        for(int i = 0; i < directions.Length; i++)
+        {
+            GraphPosition neighborPosition = new GraphPosition(changedNode._graphPosition.x + directions[i].x, changedNode._graphPosition.z + directions[i].y);
+            PathNode neighborNode = _graph.GetNodeFromGraphPosition(neighborPosition);
+
+            if(neighborNode != null && !neighborNode._isBlocked)
+            {
+                List<PathNode> neighborNodes = new List<PathNode>();
+                for(int j = 0; j < directions.Length; j++)
+                {
+                    GraphPosition neighborsNeighbor = new GraphPosition(neighborNode._graphPosition.x + directions[j].x, neighborNode._graphPosition.z + directions[j].y);
+                    PathNode neighborsNeighborNode = _graph.GetNodeFromGraphPosition(neighborsNeighbor);
+
+                    if(neighborsNeighborNode != null && !neighborsNeighborNode._isBlocked)
+                    {
+                        neighborNodes.Add(neighborsNeighborNode);
+                    }
+                }
+                neighborNode._neighbors = neighborNodes;
+
+                if (!changedNode._isBlocked)
+                    changedNode._neighbors.Add(neighborNode);
+            }
         }
     }
 

@@ -8,8 +8,6 @@ public abstract class Node<T> where T : Node<T>
 
     public List<T> _neighbors = new List<T>();
 
-    public bool _isBlocked = false;
-
     public Node(GraphPosition graphPosition)
     {
         _graphPosition = graphPosition;

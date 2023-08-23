@@ -54,17 +54,16 @@ public class Graph<T> where T : Node<T>
         {
             for (int x = 0; x < _width; x++)
             {
-                if (!_nodes[x, z]._isBlocked)
-                    _nodes[x, z]._neighbors = GetNeighbors(new GraphPosition(x, z));
+                _nodes[x, z]._neighbors = GetNeighbors(new GraphPosition(x, z));
             }
         }
     }
 
     public void ResetNodes()
     {
-        for(int x = 0; x < _width; ++x)
+        for (int x = 0; x < _width; ++x)
         {
-            for(int y = 0; y < _height; ++y)
+            for (int y = 0; y < _height; ++y)
             {
                 _nodes[x, y].Reset();
             }
@@ -85,38 +84,26 @@ public class Graph<T> where T : Node<T>
         return (graphPosition.x >= 0 && graphPosition.x < _width && graphPosition.z >= 0 && graphPosition.z < _height);
     }
 
-    public bool IsGraphPositionTraversable(GraphPosition graphPosition)
-    {
-        if (IsWithinBounds(graphPosition))
-        {
-            return !_nodes[graphPosition.x, graphPosition.z]._isBlocked;
-        }
-        return false;
-    }
-
     public List<T> GetNeighbors(GraphPosition graphPosition)
     {
-        Vector2Int[] directions = GetDirectionsByType(_connections);
+        Vector2Int[] directions = GetDirectionsByType();
         List<T> neighborNodes = new List<T>();
 
         foreach (Vector2Int direction in directions)
         {
-            int newX = graphPosition.x + direction.x;
-            int newZ = graphPosition.z + direction.y;
-
-            if (IsWithinBounds(graphPosition + direction)
-                && (!_nodes[newX, newZ]._isBlocked))
+            GraphPosition neighborPosition = new GraphPosition(graphPosition.x + direction.x, graphPosition.z + direction.y);
+            if (IsWithinBounds(neighborPosition))
             {
-                neighborNodes.Add(_nodes[newX, newZ]);
+                neighborNodes.Add(_nodes[neighborPosition.x, neighborPosition.z]);
             }
         }
 
         return neighborNodes;
     }
 
-    public Vector2Int[] GetDirectionsByType(GraphConnectionType neighborType)
+    public Vector2Int[] GetDirectionsByType()
     {
-        switch (neighborType)
+        switch (_connections)
         {
             case GraphConnectionType.Cardinal:
                 return CardinalDirections;

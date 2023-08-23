@@ -40,7 +40,7 @@ public class GraphView : MonoBehaviour
 
     public void SetNodeViewColor(GraphPosition graphPosition, Color color)
     {
-        if(_graph.IsWithinBounds(graphPosition) && IsValidNodeView(graphPosition))
+        if(IsValidNodeView(graphPosition))
         {
             _nodeViews[graphPosition.x, graphPosition.z].SetNodeViewColor(color);
         }

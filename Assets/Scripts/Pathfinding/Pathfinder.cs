@@ -225,18 +225,20 @@ public class Pathfinder : MonoBehaviour
 
         if (Mathf.Abs(distance.x * distance.z) == 1)
         {
+            PathNode adjacentNodeOne = graph.GetNodeFromGraphPosition(new GraphPosition(srcX + distance.x, srcZ));
+            PathNode adjacentNodeTwo = graph.GetNodeFromGraphPosition(new GraphPosition(srcX, srcZ + distance.z));
             if (_traversalType == TraversalType.NoSharpDiagonals)
             {
-                if (!graph.IsGraphPositionTraversable(new GraphPosition(srcX + distance.x, srcZ))
-                 || !graph.IsGraphPositionTraversable(new GraphPosition(srcX, srcZ + distance.z)))
+                if ((adjacentNodeOne != null && !adjacentNodeOne._isBlocked)
+                 || adjacentNodeTwo != null && !adjacentNodeTwo._isBlocked)
                 {
                     return false;
                 }
             }
             else
             {
-                if (!graph.IsGraphPositionTraversable(new GraphPosition(srcX + distance.x, srcZ))
-                 && !graph.IsGraphPositionTraversable(new GraphPosition(srcX, srcZ + distance.z)))
+                if ((adjacentNodeOne != null && !adjacentNodeOne._isBlocked)
+                 && (adjacentNodeTwo != null && !adjacentNodeOne._isBlocked))
                 {
                     return false;
                 }
