@@ -5,10 +5,10 @@ An A* Pathfinding tool for Unity.
 **_Classes Breakdown:_**<br />
 
 **GraphPosition** - struct for storing x/z values for node position in the graph. Every node has one, and helper functions are used to locate nodes based on these or convert from graph to world and vice versa.<br />
-**Node<T>** - base class for nodes in graph. Extend from this to create own custom nodes. Contains basic information all Nodes will share, being a GraphPosition, neighbors, and whether node is blocked. <br />
-**PathNode: Node<T>** - nodes of type Node that are used in the pathfinding.
-**Graph<T>** - holds all the nodes in a 2D array and has functions to handle them. Non-monobehavior and created/managed by user class. Generic that takes in a type of Node. <br />
-**AStarGrid** - class responsible for creating the pathfinding grid. Inspector interaction, creating the graph, and sending/receiving data to the graph. Multiple AStarGrid's can be made to have multiple graph's in a scene of varying sizes/layouts.<br />
+**Node** - base class for nodes in graph. Extend from this to create own custom nodes. Contains basic information all Nodes will share, being a GraphPosition, neighbors, and whether node is blocked. <br />
+**PathNode** - nodes extending type Node that are used in the pathfinding.
+**Graph** - holds all the nodes in a 2D array and has functions to handle them. Non-monobehaviour and created/managed by a user class. Generic that takes in a type of Node. <br />
+**AStarGrid** - class responsible for creating a pathfinding grid. Inspector interaction, creating the graph, and sending/receiving data to the graph. Multiple AStarGrid's can be made to have multiple pathfinding graphs in a scene of varying sizes/layouts.<br />
 **Pathfinder** - Singleton responsible for finding paths on a graph. FindPath is done with a start position, end position, an AStarGrid, and an out List of Vector3s.<br />
 **GraphView** - responsible for holding a grid of nodeviews and managing their display. Currently handled by the AStarGrid.<br />
 **NodeView** - visual for a graph's node. Display a tile, sized to cellsize at a nodes position, and optional a text with the graph position for debugging.<br />
