@@ -4,7 +4,7 @@ public class GraphView : MonoBehaviour
 {
     [SerializeField, RuntimeReadOnly] private NodeView _nodeViewPrefab;
     [Tooltip("Show graph positions on each Node. GraphView must be enabled.")]
-    [SerializeField, RuntimeReadOnly] private bool _showGraphPositionsOnPlay;
+    [SerializeField, RuntimeReadOnly] private bool _showGraphPositions;
 
     private NodeView[,] _nodeViews;
     private Graph<PathNode> _graph;
@@ -34,7 +34,7 @@ public class GraphView : MonoBehaviour
             nodeView.SetNodeViewColor(Color.grey);
         }
 
-        if (_showGraphPositionsOnPlay)
+        if (_showGraphPositions)
             ShowGraphPositions();
     }
 

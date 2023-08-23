@@ -24,7 +24,8 @@ public class AStarGrid : MonoBehaviour
     private enum GraphCreationType
     {
         InspectorValues,
-        TextureMap
+        TextureMap,
+        Custom
     }
 
     [SerializeField, HideInInspector, RuntimeReadOnly] private GraphCreationType _graphCreationType;
@@ -33,15 +34,15 @@ public class AStarGrid : MonoBehaviour
     [SerializeField, HideInInspector, RuntimeReadOnly] private int _height = 10;
     [SerializeField, HideInInspector, RuntimeReadOnly] private Texture2D _textureMap;
 
-    [SerializeField, RuntimeReadOnly] private int _cellSize = 1;
+    [SerializeField, HideInInspector, RuntimeReadOnly] private int _cellSize = 1;
+    [SerializeField, HideInInspector, RuntimeReadOnly] private GraphConnectionType _connectionType;
 
     [SerializeField, RuntimeReadOnly] private Color32 _openColor = Color.grey;
     [SerializeField, RuntimeReadOnly] private Color32 _blockedColor = Color.black;
     [SerializeField] private List<TerrainData> _terrainData = new List<TerrainData>();
 
-    [SerializeField, RuntimeReadOnly] private GraphConnectionType _connectionType;
     [SerializeField, RuntimeReadOnly] private GraphView _graphView;
-    [SerializeField, RuntimeReadOnly] private bool _showGraphViewOnPlay;
+    [SerializeField, RuntimeReadOnly] private bool _showGraphViewOnCreate;
 
     public Graph<PathNode> GetGraph() => _graph;
 
@@ -51,7 +52,61 @@ public class AStarGrid : MonoBehaviour
 
     private void Awake()
     {
+        switch (_graphCreationType)
+        {
+            case GraphCreationType.InspectorValues:
+                Init(_width, _height, _cellSize, _connectionType);
+                break;
+            case GraphCreationType.TextureMap:
+                Init(_textureMap.width, _textureMap.height, _cellSize, _connectionType);
+                break;
+        }
+    }
+
+    public void Init(int width, int height, int cellSize, GraphConnectionType connectionType)
+    {
+        _graphWidth = width;
+        _graphHeight = height;
+        _cellSize = cellSize;
+        _connectionType = connectionType;
+
         CreateGraph();
+    }
+
+    public void CreateGraph()
+    {
+        _graph = new Graph<PathNode>(_connectionType, _graphWidth, _graphHeight);
+        _graphView.Init(_graph, _cellSize);
+
+        for (int z = 0; z < _graphHeight; z++)
+        {
+            for (int x = 0; x < _graphWidth; x++)
+            {
+                GraphPosition nodePosition = new GraphPosition(x, z);
+                PathNode pathNode = _graph.GetNodeFromGraphPosition(nodePosition);
+                if (_graphCreationType == GraphCreationType.TextureMap)
+                {
+                    Color nodeColor = _textureMap.GetPixel(x, z);
+                    float terrainCost = GetTerrainCostFromColor(nodeColor);
+                    if (terrainCost == 0)
+                        nodeColor = _openColor;
+                    bool nodeBlocked = nodeColor == _blockedColor ? true : false;
+                    pathNode._isBlocked = nodeBlocked;
+                    pathNode._terrainCost = terrainCost;
+                    _graphView.SetNodeViewColor(nodePosition, nodeColor);
+                }
+                else
+                {
+                    pathNode._isBlocked = false;
+                    _graphView.SetNodeViewColor(nodePosition, _openColor);
+                }
+            }
+        }
+
+        if (!_showGraphViewOnCreate)
+        {
+            _graphView.HideGraphView();
+        }
     }
 
     private void OnDrawGizmos()
@@ -188,53 +243,5 @@ public class AStarGrid : MonoBehaviour
             return _terrainData.FirstOrDefault(x => x._terrainCost == terrainCost)._terrainColor;
         }
         return _openColor;
-    }
-
-    public void CreateGraph()
-    {
-        switch (_graphCreationType)
-        {
-            case GraphCreationType.InspectorValues:
-                _graphWidth = _width;
-                _graphHeight = _height;
-                break;
-            case GraphCreationType.TextureMap:
-                _graphWidth = _textureMap.width;
-                _graphHeight = _textureMap.height;
-                break;
-        }
-
-        _graph = new Graph<PathNode>(_connectionType, _graphWidth, _graphHeight);
-        _graphView.Init(_graph, _cellSize);
-
-        for (int z = 0; z < _graphHeight; z++)
-        {
-            for (int x = 0; x < _graphWidth; x++)
-            {
-                GraphPosition nodePosition = new GraphPosition(x, z);
-                PathNode pathNode = _graph.GetNodeFromGraphPosition(nodePosition);
-                if (_graphCreationType == GraphCreationType.TextureMap)
-                {
-                    Color nodeColor = _textureMap.GetPixel(x, z);
-                    float terrainCost = GetTerrainCostFromColor(nodeColor);
-                    if (terrainCost == 0)
-                        nodeColor = _openColor;
-                    bool nodeBlocked = nodeColor == _blockedColor ? true : false;
-                    pathNode._isBlocked = nodeBlocked;
-                    pathNode._terrainCost = terrainCost;
-                    _graphView.SetNodeViewColor(nodePosition, nodeColor);
-                }
-                else
-                {
-                    pathNode._isBlocked = false;
-                    _graphView.SetNodeViewColor(nodePosition, _openColor);
-                }
-            }
-        }
-
-        if (!_showGraphViewOnPlay)
-        {
-            _graphView.HideGraphView();
-        }
     }
 }

@@ -8,6 +8,8 @@ public class AStarGridEditor : Editor
     SerializedProperty _width;
     SerializedProperty _height;
     SerializedProperty _textureMap;
+    SerializedProperty _cellSize;
+    SerializedProperty _connectionType;
 
     private void OnEnable()
     {
@@ -15,6 +17,8 @@ public class AStarGridEditor : Editor
         _width = serializedObject.FindProperty("_width");
         _height = serializedObject.FindProperty("_height");
         _textureMap = serializedObject.FindProperty("_textureMap");
+        _cellSize = serializedObject.FindProperty("_cellSize");
+        _connectionType = serializedObject.FindProperty("_connectionType");
     }
 
     public override void OnInspectorGUI()
@@ -26,10 +30,14 @@ public class AStarGridEditor : Editor
         {
             EditorGUILayout.PropertyField(_width);
             EditorGUILayout.PropertyField(_height);
+            EditorGUILayout.PropertyField(_cellSize);
+            EditorGUILayout.PropertyField(_connectionType);
         }
-        else
+        else if(_graphCreationType.enumValueIndex == 1)
         {
             EditorGUILayout.PropertyField(_textureMap);
+            EditorGUILayout.PropertyField(_cellSize);
+            EditorGUILayout.PropertyField(_connectionType);
         }
 
         serializedObject.ApplyModifiedProperties();
