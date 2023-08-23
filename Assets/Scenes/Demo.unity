@@ -320,7 +320,7 @@ MonoBehaviour:
     _terrainCost: 1.5
   _connectionType: 1
   _graphView: {fileID: 335146464}
-  _showGraphViewOnPlay: 1
+  _showGraphViewOnPlay: 0
 --- !u!4 &335146463
 Transform:
   m_ObjectHideFlags: 0
