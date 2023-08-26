@@ -10,7 +10,7 @@ An A* Pathfinding tool for Unity.
 **Graph** - holds all the nodes in a 2D array and has functions to handle them. Non-monobehaviour and created/managed by a user class. Generic that takes in a type of Node. <br />
 **AStarGrid** - class responsible for creating a pathfinding grid. Inspector interaction, creating the graph, and sending/receiving data to the graph. Multiple AStarGrid's can be made to have multiple pathfinding graphs in a scene of varying sizes/layouts.<br />
 **Pathfinder** - Singleton responsible for finding paths on a graph. FindPath is done with a start position, end position, an AStarGrid, and an out List of Vector3s.<br />
-**GraphView** - responsible for holding a grid of nodeviews and managing their display. Currently handled by the AStarGrid.<br />
+**GraphView** - responsible for holding a grid of nodeviews and managing their display. Create a graphview using the data of a graph in order to get a visual representation.<br />
 **NodeView** - visual for a graph's node. Display a tile, sized to cellsize at a nodes position, and optional a text with the graph position for debugging.<br />
 **StaticFormulas** - Utility class to access heuristic/traversal formulas for pathfinding.<br />
 **DemoController** - Used as a demo of what is needed to do a pathfind. Reference to an AStarGrid, a unit or units to respond to the path, start and end positions, and a list of Vector3's to pass to Unit to traverse. Also showcases setting blocked/unblocked nodes.<br />
