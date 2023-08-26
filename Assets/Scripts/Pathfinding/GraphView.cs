@@ -5,9 +5,8 @@ public class GraphView<T> where T : Node<T>
     private NodeView[,] _nodeViews;
     private Graph<T> _graph;
     private GameObject _nodeViewContainer;
-    private bool _showGraphPositions;
 
-    public GraphView(Graph<T> graph, int cellSize, NodeView nodeViewPrefab, Transform ownerTransform)
+    public GraphView(Graph<T> graph, int cellSize, NodeView nodeViewPrefab, Transform ownerTransform, bool showGraphViewOnCreate = true)
     {
         if (graph == null)
         {
@@ -30,8 +29,8 @@ public class GraphView<T> where T : Node<T>
             _nodeViews[node._graphPosition.x, node._graphPosition.z] = nodeView;
         }
 
-        if (_showGraphPositions)
-            ShowGraphPositions();
+        if (!showGraphViewOnCreate)
+            HideGraphView();
     }
 
     public void SetNodeViewColor(GraphPosition graphPosition, Color color)

@@ -75,7 +75,7 @@ public class AStarGrid : MonoBehaviour
     public void CreateGraph()
     {
         _graph = new Graph<PathNode>(_connectionType, _graphWidth, _graphHeight);
-        _graphView = new GraphView<PathNode>(_graph, _cellSize, _nodeViewPrefab, this.transform);
+        _graphView = new GraphView<PathNode>(_graph, _cellSize, _nodeViewPrefab, this.transform, _showGraphViewOnCreate);
 
         for (int z = 0; z < _graphHeight; z++)
         {
@@ -100,11 +100,6 @@ public class AStarGrid : MonoBehaviour
                     _graphView.SetNodeViewColor(nodePosition, _openColor);
                 }
             }
-        }
-
-        if (!_showGraphViewOnCreate)
-        {
-            _graphView.HideGraphView();
         }
     }
 
