@@ -1,16 +1,13 @@
 using UnityEngine;
 
-public class GraphView : MonoBehaviour
+public class GraphView<T> where T : Node<T>
 {
-    [SerializeField, RuntimeReadOnly] private NodeView _nodeViewPrefab;
-    [Tooltip("Show graph positions on each Node. GraphView must be enabled.")]
-    [SerializeField, RuntimeReadOnly] private bool _showGraphPositions;
-
     private NodeView[,] _nodeViews;
-    private Graph<PathNode> _graph;
+    private Graph<T> _graph;
     private GameObject _nodeViewContainer;
+    private bool _showGraphPositions;
 
-    public void Init(Graph<PathNode> graph, int cellSize)
+    public GraphView(Graph<T> graph, int cellSize, NodeView nodeViewPrefab, Transform ownerTransform)
     {
         if (graph == null)
         {
@@ -22,16 +19,15 @@ public class GraphView : MonoBehaviour
         _nodeViews = new NodeView[graph.Width, graph.Height];
 
         _nodeViewContainer = new GameObject("[NodeViews]");
-        _nodeViewContainer.transform.parent = this.transform;
+        _nodeViewContainer.transform.parent = ownerTransform;
         _nodeViewContainer.transform.localPosition = new Vector3(0f, 0.01f, 0f);
 
-        foreach (PathNode node in _graph.Nodes)
+        foreach (T node in _graph.Nodes)
         {
-            NodeView nodeView = Instantiate<NodeView>(_nodeViewPrefab, _nodeViewContainer.transform);
+            NodeView nodeView = GameObject.Instantiate<NodeView>(nodeViewPrefab, _nodeViewContainer.transform);
 
             nodeView.Init(node._graphPosition, cellSize);
             _nodeViews[node._graphPosition.x, node._graphPosition.z] = nodeView;
-            nodeView.SetNodeViewColor(Color.grey);
         }
 
         if (_showGraphPositions)
@@ -40,7 +36,7 @@ public class GraphView : MonoBehaviour
 
     public void SetNodeViewColor(GraphPosition graphPosition, Color color)
     {
-        if(IsValidNodeView(graphPosition))
+        if (IsValidNodeView(graphPosition))
         {
             _nodeViews[graphPosition.x, graphPosition.z].SetNodeViewColor(color);
         }
@@ -63,7 +59,7 @@ public class GraphView : MonoBehaviour
 
     public void ShowGraphPositions()
     {
-        foreach(NodeView node in _nodeViews)
+        foreach (NodeView node in _nodeViews)
         {
             node.ShowGraphPosition();
         }

@@ -274,7 +274,6 @@ GameObject:
   m_Component:
   - component: {fileID: 335146463}
   - component: {fileID: 335146462}
-  - component: {fileID: 335146464}
   m_Layer: 0
   m_Name: '[AStarGrid]'
   m_TagString: Untagged
@@ -294,7 +293,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 501958e9b95c7d94da5786dd54d9bcb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _graphCreationType: 2
+  _graphCreationType: 0
   _width: 10
   _height: 10
   _textureMap: {fileID: 2800000, guid: 996750778fca30b4a86bd0e08a13232a, type: 3}
@@ -319,8 +318,8 @@ MonoBehaviour:
       serializedVersion: 2
       rgba: 4279009791
     _terrainCost: 1.5
-  _graphView: {fileID: 335146464}
-  _showGraphViewOnCreate: 0
+  _nodeViewPrefab: {fileID: 1151067951644193532, guid: fe7bb48f1e565384d8b062480fd6bebf, type: 3}
+  _showGraphViewOnCreate: 1
 --- !u!4 &335146463
 Transform:
   m_ObjectHideFlags: 0
@@ -336,20 +335,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &335146464
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 335146461}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14254e12497cdc8458b3a61eb12228d3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _nodeViewPrefab: {fileID: 1151067951644193532, guid: fe7bb48f1e565384d8b062480fd6bebf, type: 3}
-  _showGraphPositions: 0
 --- !u!1 &474006839
 GameObject:
   m_ObjectHideFlags: 0

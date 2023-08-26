@@ -39,7 +39,7 @@ public class AStarGrid : MonoBehaviour
     [SerializeField, RuntimeReadOnly] private Color32 _blockedColor = Color.black;
     [SerializeField] private List<TerrainData> _terrainData = new List<TerrainData>();
 
-    [SerializeField, RuntimeReadOnly] private GraphView _graphView;
+    [SerializeField, RuntimeReadOnly] private NodeView _nodeViewPrefab;
     [SerializeField, RuntimeReadOnly] private bool _showGraphViewOnCreate;
 
     public Graph<PathNode> GetGraph() => _graph;
@@ -47,6 +47,7 @@ public class AStarGrid : MonoBehaviour
     private int _graphWidth;
     private int _graphHeight;
     private Graph<PathNode> _graph;
+    private GraphView<PathNode> _graphView;
 
     private void Awake()
     {
@@ -74,7 +75,7 @@ public class AStarGrid : MonoBehaviour
     public void CreateGraph()
     {
         _graph = new Graph<PathNode>(_connectionType, _graphWidth, _graphHeight);
-        _graphView.Init(_graph, _cellSize);
+        _graphView = new GraphView<PathNode>(_graph, _cellSize, _nodeViewPrefab, this.transform);
 
         for (int z = 0; z < _graphHeight; z++)
         {
